@@ -1,4 +1,4 @@
-package org.matveev.pomodoro4nb.model;
+package org.matveev.pomodoro4nb.tasktable;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +9,14 @@ import java.util.Date;
  */
 public class Task implements Serializable {
 
+    public enum Tag {
+        Improvements,
+        Blocker,
+        Critical,
+        Major,
+        Minor,
+    }
+    
     private final String description;
     private final int estimate;
     private int pomodoros;
@@ -31,35 +39,32 @@ public class Task implements Serializable {
         return estimate;
     }
 
-
     public Date getCreationDate() {
         return creationDate;
     }
-
 
     public int getInteraptions() {
         return interaptions;
     }
 
-    public void setInteraptions(int interaptions) {
-        this.interaptions = interaptions;
+    public void incrementInteraption() {
+        this.interaptions += 1;
     }
 
     public int getPomodoros() {
         return pomodoros;
     }
 
-    public void setPomodoros(int pomodoros) {
-        this.pomodoros = pomodoros;
+    public void incrementPomodoros() {
+        this.pomodoros += 1;
     }
-
 
     public int getUnplaned() {
         return unplaned;
     }
 
-    public void setUnplaned(int unplaned) {
-        this.unplaned = unplaned;
+    public void incrementUnplaned() {
+        this.unplaned += 1;
     }
 
     public boolean isCompleted() {
@@ -72,16 +77,13 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        return "Task{" 
+        return "Task{"
                 + "description=" + description
                 + ", estimate=" + estimate
                 + ", pomodoros=" + pomodoros
-                + ", interaptions=" + interaptions 
-                + ", unplaned=" + unplaned 
+                + ", interaptions=" + interaptions
+                + ", unplaned=" + unplaned
                 + ", creationDate=" + creationDate
                 + ", completed=" + completed + '}';
     }
-
-    
-    
 }

@@ -1,4 +1,4 @@
-package org.matveev.pomodoro4nb;
+package org.matveev.pomodoro4nb.tasktable;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -16,7 +16,8 @@ import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import org.matveev.pomodoro4nb.model.TaskTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -28,6 +29,12 @@ public class TaskTable extends JTable {
 
     public TaskTable() {
         super(new TaskTableModel());
+        
+        TableRowSorter<TaskTableModel> sorter = 
+                new TableRowSorter<TaskTableModel>((TaskTableModel)getModel());
+        sorter.setRowFilter(new TaskTableTagFilter());
+        setRowSorter(sorter);
+        
         this.renderer = new AlignmentTableCellRenderer();
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         getTableHeader().setResizingAllowed(false);

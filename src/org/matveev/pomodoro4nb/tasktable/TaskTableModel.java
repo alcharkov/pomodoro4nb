@@ -1,4 +1,4 @@
-package org.matveev.pomodoro4nb.model;
+package org.matveev.pomodoro4nb.tasktable;
 
 import java.util.ArrayList;
 import java.util.Collections;

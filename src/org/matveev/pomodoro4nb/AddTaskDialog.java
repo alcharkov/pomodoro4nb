@@ -20,7 +20,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import org.matveev.pomodoro4nb.model.Task;
+import org.matveev.pomodoro4nb.tasktable.Task;
 import org.openide.util.NbBundle;
 
 /**
@@ -39,6 +39,7 @@ public class AddTaskDialog extends JDialog {
     public AddTaskDialog(Window owner) {
         super(owner);
         setModal(true);
+        setLocationRelativeTo(null);
 
         createComponents();
     }

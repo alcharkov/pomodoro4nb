@@ -37,15 +37,6 @@ public class Notificator {
                 notification.clear();
             }
         }, DEFAULT_NOTIFACTION_DELAY);
-        sleep(DEFAULT_NOTIFACTION_DELAY);
-    }
-
-    private static void sleep(long time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        }
     }
 
     private static String getMessage(final String key) {

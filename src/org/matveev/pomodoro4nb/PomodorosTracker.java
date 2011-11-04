@@ -1,5 +1,6 @@
 package org.matveev.pomodoro4nb;
 
+import org.matveev.pomodoro4nb.tasktable.TaskTable;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -7,8 +8,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +23,11 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 import org.matveev.pomodoro4nb.io.ObjectSerializer;
-import org.matveev.pomodoro4nb.model.Task;
-import org.matveev.pomodoro4nb.model.TaskTableModel;
+import org.matveev.pomodoro4nb.tasktable.Task;
+import org.matveev.pomodoro4nb.tasktable.TaskTableModel;
+import org.matveev.pomodoro4nb.timer.PomodoroTimer;
+import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
+import org.matveev.pomodoro4nb.timer.PomodoroTimerListener;
 import org.openide.util.NbBundle;
 
 /**
@@ -34,96 +36,69 @@ import org.openide.util.NbBundle;
  */
 public class PomodorosTracker {
 
-    private TimerControl timerControl;
+    private PomodoroTimer timerControl;
     private TaskTable table;
     private JPopupMenu popupMenu;
     private List<ValidatableAction> actions = new ArrayList<ValidatableAction>();
 
     public PomodorosTracker() {
     }
-    
-    
-    public JPanel createContent()  {
+
+    public JPanel createContent() {
         // TODO: read settings here...
         JPanel content = new JPanel(new BorderLayout());
         content.add(getTimerControl(), BorderLayout.NORTH);
         content.add(createTaskTablePanel());
         return content;
     }
-    
-    
+
     public void storeProperties(Properties props) throws IOException {
         final StringBuilder stringBuilder = new StringBuilder();
         TaskTableModel model = getTable().getTaskTableModel();
-        for(Task task : model.getTaskList()) {
+        for (Task task : model.getTaskList()) {
             stringBuilder.append(ObjectSerializer.toString(task));
             stringBuilder.append(" ");
         }
         props.setProperty("data", stringBuilder.toString());
     }
 
-    
-    public TimerControl getTimerControl() {
-        if(timerControl == null) {
-            timerControl = new TimerControl(new TimerControl.TimerControlInputHandler() {
+    public PomodoroTimer getTimerControl() {
+        if (timerControl == null) {
+            timerControl = new PomodoroTimer();
+            timerControl.addPomodoroTimerListener(new PomodoroTimerListener() {
 
                 @Override
-                public void handle() {
-                    if(timerControl.isStarted()) {
-                        timerControl.stop();
-                        timerControl.removeAllPropertyChangeLiteners();
-                    } else {
-                        if(canStartTimer()) {
-                            timerControl.start();
-                            timerControl.addPropertyChangeListener(
-                                    new TaskMetricsUpdater(getTable().getTaskTableModel().getTask(
-                                    getTable().getSelectedRow())));
-                        }
+                public void stateChanged(State state, boolean forced) {
+                    if(forced) {
+                        return;
                     }
-                }
-                
-                private boolean canStartTimer() {
-                    return getTable().getSelectedRowCount() > 0;
+                    if (State.IDLE.equals(state)) {
+                        Notificator.showNotification(Notificator.KEY_START_WORK);
+                    } else if (State.BREAK.equals(state)) {
+                        if (getTable().getSelectedRowCount() > 0) {
+                            getTable().getTaskTableModel().
+                                    getTask(getTable().getSelectedRow()).incrementPomodoros();
+                        }
+                        Notificator.showNotification(Notificator.KEY_START_BREAK);
+                    }
                 }
             });
         }
         return timerControl;
     }
-    
-    private class TaskMetricsUpdater implements PropertyChangeListener {
-
-        private final Task task;
-
-        public TaskMetricsUpdater(Task task) {
-            this.task = task;
-        }
-        
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if(TimerControl.STATUS_PROPERTY.equals(evt.getPropertyName())) {
-                if(TimerControl.Status.DONE.equals(evt.getNewValue())) {
-                    task.setPomodoros(task.getPomodoros() + 1);
-                    getTable().getTaskTableModel().fireTableDataChanged();
-                    getTable().selectNextRow(getTable().getTaskTableModel().getTaskList().indexOf(task));
-                }
-            }
-        }
-        
-    }
 
     public void updateContent(Properties props) throws IOException, ClassNotFoundException {
-           String data = props.getProperty("data");
-        if(data != null) {
+        String data = props.getProperty("data");
+        if (data != null) {
             TaskTableModel model = getTable().getTaskTableModel();
-            String [] records = data.split(" ");
-            for(String r : records) {
+            String[] records = data.split(" ");
+            for (String r : records) {
                 Task task = (Task) ObjectSerializer.fromString(r);
                 model.addTask(task);
             }
         }
     }
-    
-    
+
     private JScrollPane createTaskTablePanel() {
         final JScrollPane scrollPane = new JScrollPane(getTable(),
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -194,7 +169,6 @@ public class PomodorosTracker {
         }
     }
 
-
     private static String getMessage(final String key) {
         return NbBundle.getMessage(PomodorosTracker.class, key);
     }
@@ -223,7 +197,6 @@ public class PomodorosTracker {
         }
     }
 
-
     private class ClearTaskTableAction extends AbstractAction implements ValidatableAction {
 
         public ClearTaskTableAction() {
@@ -233,7 +206,7 @@ public class PomodorosTracker {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-       
+
 
             ((TaskTableModel) table.getModel()).removeAllTasks();
         }
@@ -278,7 +251,6 @@ public class PomodorosTracker {
         public void actionPerformed(ActionEvent e) {
             AddTaskDialog dialog = new AddTaskDialog(null);
             dialog.setVisible(true);
-
             final Task task = dialog.getTask();
             if (task != null) {
                 ((TaskTableModel) table.getModel()).addTask(task);
