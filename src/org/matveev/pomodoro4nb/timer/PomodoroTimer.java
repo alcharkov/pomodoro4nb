@@ -28,32 +28,24 @@ import org.matveev.pomodoro4nb.ui.RolloverButton;
  */
 public class PomodoroTimer extends JPanel {
 
-    public enum State { IDLE, WORK, BREAK }
-    
+    public enum State {
+
+        IDLE, WORK, BREAK
+    }
     private final List<PomodoroTimerListener> timerListeners = new ArrayList<PomodoroTimerListener>();
-    
     private JLabel timeLabel;
     private JButton controlButton;
-    
     private final Action startAction = new StartTimerAction();
     private final Action stopAction = new StopTimerAction();
-    
     private Timer countTime;
     private Timer progressTimer;
-    
-    private final PomodoroTimerData data;
-    
+    private PomodoroTimerData data;
     private State state;
-    
     private double progress;
     private long startTime;
     private long endTime;
-    
     private boolean isForcedStateChange;
-
-    public PomodoroTimer() {
-        this(new PomodoroTimerData());
-    }
+    private int pomodoros;
 
     public PomodoroTimer(PomodoroTimerData data) {
         this.data = data;
@@ -62,7 +54,7 @@ public class PomodoroTimer extends JPanel {
 
     private void createComponents() {
         setLayout(new BorderLayout());
-        
+
         controlButton = new RolloverButton(startAction);
         add(controlButton, BorderLayout.WEST);
 
@@ -73,18 +65,23 @@ public class PomodoroTimer extends JPanel {
         add(timeLabel);
     }
 
+    public void setNewTimerData(PomodoroTimerData data) {
+        if (data != null) {
+            this.data = data;
+        }
+    }
+
     public void setState(State newState) {
         this.state = newState;
-        stop();
-        switch (state) {
-            case IDLE:
-                break;
-            case WORK:
-            case BREAK:
-                start();
-                break;
-        }
         fireStateChanged();
+        stop();
+        if (!State.IDLE.equals(state)) {
+            if (State.BREAK.equals(state)) {
+                pomodoros++;
+            }
+            start();
+
+        }
     }
 
     protected void fireStateChanged() {
@@ -102,11 +99,11 @@ public class PomodoroTimer extends JPanel {
             progressTimer.cancel();
         }
     }
-    
+
     public void addPomodoroTimerListener(PomodoroTimerListener listener) {
         timerListeners.add(listener);
     }
-    
+
     public void removePomodoroTimerListener(PomodoroTimerListener listener) {
         timerListeners.remove(listener);
     }
@@ -151,9 +148,16 @@ public class PomodoroTimer extends JPanel {
     private void updateTimeValuesAccordingToState() {
         progress = 0;
         startTime = System.currentTimeMillis();
-        endTime = startTime + (State.WORK.equals(state)
-                ? data.getWorkDurationInMillis()
-                : data.getBreakDurationInMillis());
+        if(State.WORK.equals(state)) {
+            endTime = startTime +  data.getPomodoroLengthInMillis();
+        } else if(State.BREAK.equals(state)) {
+            if(pomodoros == data.getLongBreakInterval()) {
+                endTime = startTime +  data.getLongBreakLengthInMillis();
+                pomodoros = 0;
+            } else {
+                    endTime = startTime +  data.getShortBreakLengthInMillis();
+            }
+        }
     }
 
     public void start() {
@@ -162,10 +166,10 @@ public class PomodoroTimer extends JPanel {
         updateGUI();
         repaint();
     }
-    
+
     private void updateGUI() {
         controlButton.setAction(State.IDLE.equals(state) ? startAction : stopAction);
-        timeLabel.setText(TimeFormater.format(data.getWorkDurationInMillis()));
+        timeLabel.setText(TimeFormater.format(data.getPomodoroLengthInMillis()));
     }
 
     private void nextState() {
@@ -197,7 +201,7 @@ public class PomodoroTimer extends JPanel {
     private class StartTimerAction extends AbstractAction {
 
         public StartTimerAction() {
-            super("", Utils.createIcon("btn_start.png"));
+            super("", Utils.createIcon("media-playback-start.png"));
         }
 
         @Override
@@ -209,7 +213,7 @@ public class PomodoroTimer extends JPanel {
     private class StopTimerAction extends AbstractAction {
 
         public StopTimerAction() {
-            super("", Utils.createIcon("btn_stop.png"));
+            super("", Utils.createIcon("media-playback-stop.png"));
         }
 
         @Override

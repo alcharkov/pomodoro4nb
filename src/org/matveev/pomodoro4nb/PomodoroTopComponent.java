@@ -30,7 +30,6 @@ public final class PomodoroTopComponent extends TopComponent {
       
     }
     
-    
     private void initComponents() {
         setLayout(new BorderLayout());
         add(tracker.createContent());
@@ -65,7 +64,7 @@ public final class PomodoroTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         try {
-            tracker.updateContent(p);
+            tracker.loadProperties(p);
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         } catch (ClassNotFoundException ex) {
