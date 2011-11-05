@@ -1,11 +1,14 @@
 package org.matveev.pomodoro4nb.tasktable;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
+import java.util.EnumMap;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -16,8 +19,8 @@ import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import org.matveev.pomodoro4nb.tasktable.Task.Tag;
 
 /**
  *
@@ -29,12 +32,12 @@ public class TaskTable extends JTable {
 
     public TaskTable() {
         super(new TaskTableModel());
-        
-        TableRowSorter<TaskTableModel> sorter = 
-                new TableRowSorter<TaskTableModel>((TaskTableModel)getModel());
+
+        TableRowSorter<TaskTableModel> sorter =
+                new TableRowSorter<TaskTableModel>((TaskTableModel) getModel());
         sorter.setRowFilter(new TaskTableTagFilter());
         setRowSorter(sorter);
-        
+
         this.renderer = new AlignmentTableCellRenderer();
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         getTableHeader().setResizingAllowed(false);
@@ -56,8 +59,17 @@ public class TaskTable extends JTable {
 
     private static class AlignmentTableCellRenderer extends DefaultTableCellRenderer {
 
+        private static final Map<Task.Tag, Color> colorsMap = new EnumMap<Task.Tag, Color>(Task.Tag.class);
+
+        static {
+            colorsMap.put(Tag.Improvements, new Color(233, 239, 242));
+            colorsMap.put(Tag.Critical, new Color(252, 226, 217));
+            colorsMap.put(Tag.Major, new Color(252, 244, 217));
+            colorsMap.put(Tag.Minor, new Color(237, 252, 217));
+        }
         private static final Border EMPTY_BORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
         private boolean isCompleted;
+        private Tag taskTag;
 
         /*package*/ AlignmentTableCellRenderer() {
         }
@@ -68,19 +80,33 @@ public class TaskTable extends JTable {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             setBorder(EMPTY_BORDER);
             setHorizontalAlignment(SwingConstants.LEFT);
-            isCompleted = ((TaskTable) table).getTaskTableModel().getTask(row).isCompleted();
+
+            Task task = ((TaskTable) table).getTaskTableModel().getTask(row);
+            isCompleted = task.isCompleted();
+            taskTag = task.getTag();
             return this;
         }
 
         @Override
         public void paint(Graphics g) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setColor(getBackgroundColorForTaskTag());
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+
             super.paint(g);
             if (isCompleted) {
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON);
                 g2d.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
             }
+        }
+
+        private Color getBackgroundColorForTaskTag() {
+            Color color = Color.WHITE;
+            if (taskTag != null) {
+                color = colorsMap.get(taskTag);
+            }
+            return color;
         }
     }
 
@@ -92,7 +118,7 @@ public class TaskTable extends JTable {
 
         /*package*/ DragAndDropUI() {
         }
-        
+
         @Override
         protected MouseInputListener createMouseInputListener() {
             return new DragDropRowMouseInputHandler();

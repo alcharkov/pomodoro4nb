@@ -11,18 +11,18 @@ public class Task implements Serializable {
 
     public enum Tag {
         Improvements,
-        Blocker,
         Critical,
         Major,
         Minor,
     }
-    
+
     private final String description;
     private final int estimate;
     private int pomodoros;
     private int interaptions;
     private int unplaned;
     private final Date creationDate;
+    private Tag tag;
     private boolean completed;
 
     public Task(String description, int estimate) {
@@ -75,6 +75,14 @@ public class Task implements Serializable {
         this.completed = completed;
     }
 
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
+
     @Override
     public String toString() {
         return "Task{"
@@ -84,6 +92,7 @@ public class Task implements Serializable {
                 + ", interaptions=" + interaptions
                 + ", unplaned=" + unplaned
                 + ", creationDate=" + creationDate
+                + ", tag=" + tag
                 + ", completed=" + completed + '}';
     }
 }

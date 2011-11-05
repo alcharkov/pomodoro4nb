@@ -10,60 +10,45 @@ public class PomodoroTimerData {
 
     private static final Color DEFAULT_WORK_PROGRESS_BAR_COLOR = new Color(102, 213, 41);
     private static final Color DEFAULT_BREAK_PROGRESS_BAR_COLOR = new Color(183, 173, 237);
-    private static final long DEFAULT_WORK_TIME_IN_MILLIS = 1000 * 7;
-    private static final long DEFAULT_BREAK_TIME_IN_MILLIS = 1000 * 5;
-    private static final long DEFAULT_LONG_BREAK_TIME_IN_MILLIS = 1000 * 60 * 30;
-    private static final int DEFAULT_LONG_BREAK_INTERVAL = 4;
-    
-    private final Color workProgressBarColor;
-    private final Color breakProgressBarColor;
-    
-    private final long workDurationInMillis;
-    private final long breakDurationInMillis;
-    private final long longBreakDurationInMillis;
+
+    private final long pomodoroLengthInMillis;
+    private final long shortBreakLengthInMillis;
+    private final long longBreakLengthInMillis;
     private final int longBreakInterval;
 
-    public PomodoroTimerData() {
-        this(DEFAULT_WORK_PROGRESS_BAR_COLOR,
-                DEFAULT_BREAK_PROGRESS_BAR_COLOR,
-                DEFAULT_WORK_TIME_IN_MILLIS,
-                DEFAULT_BREAK_TIME_IN_MILLIS,
-                DEFAULT_LONG_BREAK_TIME_IN_MILLIS,
-                DEFAULT_LONG_BREAK_INTERVAL);
-    }
-
-    public PomodoroTimerData(Color workProgressBarColor, Color breakProgressBarColor,
-            long workDurationInMillis, long breakDurationInMillis, long longBreakDurationInMillis,
-            int longBreakInterval) {
-        this.workProgressBarColor = workProgressBarColor;
-        this.breakProgressBarColor = breakProgressBarColor;
-        this.workDurationInMillis = workDurationInMillis;
-        this.breakDurationInMillis = breakDurationInMillis;
-        this.longBreakDurationInMillis = longBreakDurationInMillis;
+    public PomodoroTimerData(int pomodoroLength, int shortBreakLength,
+            int longBreakLength, int longBreakInterval) {
+        this.pomodoroLengthInMillis = toMillis(pomodoroLength);
+        this.shortBreakLengthInMillis = toMillis(shortBreakLength);
+        this.longBreakLengthInMillis = toMillis(longBreakLength);
         this.longBreakInterval = longBreakInterval;
     }
-
-    public long getBreakDurationInMillis() {
-        return breakDurationInMillis;
-    }
-
-    public long getLongBreakDurationInMillis() {
-        return longBreakDurationInMillis;
+    
+    private static long toMillis(int timeInMinutes) {
+        return timeInMinutes * 60 * 1000;
     }
 
     public int getLongBreakInterval() {
         return longBreakInterval;
     }
 
-    public long getWorkDurationInMillis() {
-        return workDurationInMillis;
+    public long getLongBreakLengthInMillis() {
+        return longBreakLengthInMillis;
     }
 
+    public long getPomodoroLengthInMillis() {
+        return pomodoroLengthInMillis;
+    }
+
+    public long getShortBreakLengthInMillis() {
+        return shortBreakLengthInMillis;
+    }
+    
     public Color getBreakProgressBarColor() {
-        return breakProgressBarColor;
+        return DEFAULT_BREAK_PROGRESS_BAR_COLOR;
     }
 
     public Color getWorkProgressBarColor() {
-        return workProgressBarColor;
+        return DEFAULT_WORK_PROGRESS_BAR_COLOR;
     }
 }
