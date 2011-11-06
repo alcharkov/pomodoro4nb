@@ -4,4 +4,3 @@ OpenIDE-Module: org.matveev.pomodoro4nb
 OpenIDE-Module-Localizing-Bundle: org/matveev/pomodoro4nb/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
 OpenIDE-Module-Specification-Version: 1.0
-
