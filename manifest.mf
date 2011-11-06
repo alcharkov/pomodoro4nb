@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
 OpenIDE-Module: org.matveev.pomodoro4nb
 OpenIDE-Module-Localizing-Bundle: org/matveev/pomodoro4nb/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
