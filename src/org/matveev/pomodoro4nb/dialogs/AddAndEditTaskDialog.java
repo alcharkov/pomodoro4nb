@@ -53,7 +53,12 @@ public class AddAndEditTaskDialog extends javax.swing.JPanel {
         });
 
         if (DialogDisplayer.getDefault().notify(descriptor) == NotifyDescriptor.OK_OPTION) {
-            return dialog.getTask();
+            final Task task = dialog.getTask();
+            if(toEdit != null) {
+                toEdit.setDescription(task.getDescription());
+                toEdit.setEstimate(task.getEstimate());
+            }
+            return task;
         }
         return dialog.getEditableTask();
     }

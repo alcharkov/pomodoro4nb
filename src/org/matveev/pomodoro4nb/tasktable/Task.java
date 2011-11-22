@@ -16,8 +16,8 @@ public class Task implements Serializable {
         Minor,
     }
 
-    private final String description;
-    private final int estimate;
+    private String description;
+    private int estimate;
     private int pomodoros;
     private int interaptions;
     private int unplaned;
@@ -43,6 +43,14 @@ public class Task implements Serializable {
         return creationDate;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setEstimate(int estimate) {
+        this.estimate = estimate;
+    }
+    
     public int getInteraptions() {
         return interaptions;
     }

@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
 import java.util.Map;
@@ -14,6 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.basic.BasicTableUI;
@@ -33,6 +36,8 @@ public class TaskTable extends JTable {
     public TaskTable() {
         super(new TaskTableModel());
 
+        addMouseListener(new RightClickSelector(this));
+        
         TableRowSorter<TaskTableModel> sorter =
                 new TableRowSorter<TaskTableModel>((TaskTableModel) getModel());
         sorter.setRowFilter(new TaskTableTagFilter());
@@ -80,13 +85,15 @@ public class TaskTable extends JTable {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             setBorder(EMPTY_BORDER);
             setHorizontalAlignment(SwingConstants.LEFT);
-
-            Task task = ((TaskTable) table).getTaskTableModel().getTask(row);
-            isCompleted = task.isCompleted();
+            
+            final Task task = ((TaskTable) table).getTaskTableModel().getTask(
+                    table.convertRowIndexToModel(row));
+            
             taskTag = task.getTag();
+            isCompleted = task.isCompleted();
             return this;
         }
-
+        
         @Override
         public void paint(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
@@ -188,6 +195,25 @@ public class TaskTable extends JTable {
                 super.mouseReleased(e);
                 isDragging = false;
                 table.repaint();
+            }
+        }
+    }
+    
+        private static final class RightClickSelector extends MouseAdapter {
+
+        private final TaskTable table;
+
+        public RightClickSelector(TaskTable table) {
+            this.table = table;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+                Point p = e.getPoint();
+                int rowNumber = table.rowAtPoint(p);
+                ListSelectionModel model = table.getSelectionModel();
+                model.setSelectionInterval(rowNumber, rowNumber);
             }
         }
     }
