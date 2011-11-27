@@ -5,7 +5,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
-import org.matveev.pomodoro4nb.tasktable.Task;
+import org.matveev.pomodoro4nb.task.Task;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 
@@ -66,14 +66,14 @@ public class AddAndEditTaskDialog extends javax.swing.JPanel {
     /*package*/ Task getTask() {
         String desc = descriptionField.getText();
         return (desc != null && !desc.isEmpty())
-                ? new Task(desc, (Integer) estimateSpinner.getValue())
+                ? Task.createTask(desc, (Integer) estimateSpinner.getValue())
                 : null;
     }
 
     private void configureComponents() {
         if(taskToEdit != null) {
-            descriptionField.setText(taskToEdit.getDescription());
-            estimateSpinner.setValue(taskToEdit.getEstimate());
+            descriptionField.setText(taskToEdit.getProperty(Task.Description));
+            estimateSpinner.setValue(taskToEdit.getProperty(Task.Estimate));
         }
         
         descriptionField.getDocument().addDocumentListener(new DocumentListener() {

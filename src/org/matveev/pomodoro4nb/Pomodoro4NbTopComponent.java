@@ -28,9 +28,10 @@ persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 preferredID = "Pomodoro4NbTopComponent")
 public final class Pomodoro4NbTopComponent extends TopComponent {
 
-    private PomodorosTracker tracker = new PomodorosTracker();
+    private final PomodoroMainController mainController;
 
     public Pomodoro4NbTopComponent() {
+        mainController = new PomodoroMainController();
         initComponents();
         additionalInit();
         setName(NbBundle.getMessage(Pomodoro4NbTopComponent.class, "CTL_Pomodoro4NbTopComponent"));
@@ -40,7 +41,7 @@ public final class Pomodoro4NbTopComponent extends TopComponent {
 
     private void additionalInit() {
         setLayout(new BorderLayout());
-        add(tracker.createContent());
+        add(mainController.createContent());
     }
 
     @Override
@@ -79,20 +80,20 @@ public final class Pomodoro4NbTopComponent extends TopComponent {
     }
 
     void writeProperties(java.util.Properties p) {
-        try {
-            tracker.storeProperties(p);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+//        try {
+//            tracker.storeProperties(p);
+//        } catch (IOException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
     }
 
     void readProperties(java.util.Properties p) {
-        try {
-            tracker.loadProperties(p);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (ClassNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
-        }
+//        try {
+//            tracker.loadProperties(p);
+//        } catch (IOException ex) {
+//            Exceptions.printStackTrace(ex);
+//        } catch (ClassNotFoundException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
     }
 }

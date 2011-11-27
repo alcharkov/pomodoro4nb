@@ -1,9 +1,5 @@
 package org.matveev.pomodoro4nb.timer;
 
-/**
- *
- * @author Alexey Matveev
- */
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,8 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import org.matveev.pomodoro4nb.Utils;
-import org.matveev.pomodoro4nb.ui.RolloverButton;
+import org.matveev.pomodoro4nb.controls.RolloverButton;
+import org.matveev.pomodoro4nb.utils.Utils;
 
 /**
  *
@@ -65,6 +61,18 @@ public class PomodoroTimer extends JPanel {
         add(timeLabel);
     }
 
+    /*package*/ void setTimerData(PomodoroTimerData data) {
+        this.data = data;
+        if(state == State.IDLE) {
+            updateGUI();
+        }
+    }
+
+    public void forcedStop() {
+        setState(State.IDLE);
+        isForcedStateChange = true;
+    }
+
     public void setNewTimerData(PomodoroTimerData data) {
         if (data != null) {
             this.data = data;
@@ -91,6 +99,13 @@ public class PomodoroTimer extends JPanel {
         isForcedStateChange = false;
     }
 
+    protected void firePreStart() {
+        for (PomodoroTimerListener l : timerListeners) {
+            l.preStart();
+        }
+        isForcedStateChange = false;
+    }
+
     private void cancelTimers() {
         if (countTime != null) {
             countTime.cancel();
@@ -100,11 +115,11 @@ public class PomodoroTimer extends JPanel {
         }
     }
 
-    public void addPomodoroTimerListener(PomodoroTimerListener listener) {
+    /*package*/ void addPomodoroTimerListener(PomodoroTimerListener listener) {
         timerListeners.add(listener);
     }
 
-    public void removePomodoroTimerListener(PomodoroTimerListener listener) {
+    /*package*/ void removePomodoroTimerListener(PomodoroTimerListener listener) {
         timerListeners.remove(listener);
     }
 
@@ -148,14 +163,14 @@ public class PomodoroTimer extends JPanel {
     private void updateTimeValuesAccordingToState() {
         progress = 0;
         startTime = System.currentTimeMillis();
-        if(State.WORK.equals(state)) {
-            endTime = startTime +  data.getPomodoroLengthInMillis();
-        } else if(State.BREAK.equals(state)) {
-            if(pomodoros == data.getLongBreakInterval()) {
-                endTime = startTime +  data.getLongBreakLengthInMillis();
+        if (State.WORK.equals(state)) {
+            endTime = startTime + data.getPomodoroLengthInMillis();
+        } else if (State.BREAK.equals(state)) {
+            if (pomodoros == data.getLongBreakInterval()) {
+                endTime = startTime + data.getLongBreakLengthInMillis();
                 pomodoros = 0;
             } else {
-                    endTime = startTime +  data.getShortBreakLengthInMillis();
+                endTime = startTime + data.getShortBreakLengthInMillis();
             }
         }
     }
@@ -191,6 +206,10 @@ public class PomodoroTimer extends JPanel {
         g2d.fill(shape);
     }
 
+    public void forcedStart() {
+        setState(State.WORK);
+    }
+
     public void stop() {
         cancelTimers();
         updateTimeValuesAccordingToState();
@@ -206,7 +225,7 @@ public class PomodoroTimer extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            setState(State.WORK);
+            firePreStart();
         }
     }
 

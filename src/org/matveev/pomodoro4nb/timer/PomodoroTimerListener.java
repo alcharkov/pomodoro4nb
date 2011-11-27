@@ -6,8 +6,9 @@ import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
  *
  * @author Alexey Matveev
  */
-public interface PomodoroTimerListener {
+/*package*/ interface PomodoroTimerListener {
 
     public void stateChanged(State state, boolean forced);
+    public void preStart();
     
 }
