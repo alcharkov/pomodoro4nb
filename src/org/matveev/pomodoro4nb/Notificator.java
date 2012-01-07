@@ -17,10 +17,10 @@
  */
 package org.matveev.pomodoro4nb;
 
-import org.matveev.pomodoro4nb.utils.Utils;
 import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
+import org.matveev.pomodoro4nb.utils.Resources;
 import org.openide.awt.Notification;
 import org.openide.awt.NotificationDisplayer;
 import org.openide.util.NbBundle;
@@ -36,19 +36,6 @@ public class Notificator {
     public static final String KEY_START_WORK = "notificationsStartWork";
     public static final String KEY_START_BREAK = "notificationsStartBreak";
     public static final String KEY_EMPTY_TASK_LIST = "notificationsEmptyTaskList";
-//
-//    public static void showNotifcationPopup(String key) {
-//        NotificationPopup popup = new NotificationPopup(
-//                getMessage(key + ".title"),  getMessage(key + ".text"));
-//        final NotifyDescriptor descriptor = new NotifyDescriptor(
-//                popup,
-//                "Pomodoro",
-//                ,
-//                NotifyDescriptor.PLAIN_MESSAGE,
-//                null,
-//                NotifyDescriptor.OK_OPTION);
-//        DialogDisplayer.getDefault().notify(descriptor);
-//    }
 
     public static void showNotificationBalloon(String key) {
         showNotificationBalloon(key, null);
@@ -57,7 +44,7 @@ public class Notificator {
     public static void showNotificationBalloon(String key, ActionListener listener) {
         final Notification notification = NotificationDisplayer.getDefault().notify(
                 getMessage(key + ".title"),
-                Utils.createIcon(getMessage(key + ".iconName")),
+                Resources.createIcon(getMessage(key + ".iconName")),
                 getMessage(key + ".text"), listener);
         final Timer removeNotificationTimer = new Timer();
         removeNotificationTimer.schedule(new TimerTask() {
