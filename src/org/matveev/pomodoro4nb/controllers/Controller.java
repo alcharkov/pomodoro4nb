@@ -3,8 +3,8 @@ package org.matveev.pomodoro4nb.controllers;
 import java.awt.Container;
 import java.util.List;
 import org.matveev.pomodoro4nb.utils.Storable;
-import org.matveev.pomodoro4nb.utils.data.Property;
-import org.matveev.pomodoro4nb.utils.data.PropertyListener;
+import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.data.PropertyListener;
 
 /**
  *

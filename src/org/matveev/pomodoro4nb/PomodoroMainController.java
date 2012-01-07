@@ -16,8 +16,8 @@ import org.matveev.pomodoro4nb.prefs.PreferencesProviderFactory;
 import org.matveev.pomodoro4nb.task.TaskController;
 import org.matveev.pomodoro4nb.task.TaskController.ActionWithAccelerator;
 import org.matveev.pomodoro4nb.timer.TimerController;
-import org.matveev.pomodoro4nb.utils.data.Property;
-import org.matveev.pomodoro4nb.utils.data.PropertyListener;
+import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.data.PropertyListener;
 
 /**
  *

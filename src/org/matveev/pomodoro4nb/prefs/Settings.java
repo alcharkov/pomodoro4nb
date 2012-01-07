@@ -1,13 +1,13 @@
 package org.matveev.pomodoro4nb.prefs;
 
-import org.matveev.pomodoro4nb.utils.data.PropertiesHolder;
-import org.matveev.pomodoro4nb.utils.data.Property;
+import org.matveev.pomodoro4nb.data.Properties;
+import org.matveev.pomodoro4nb.data.Property;
 
 /**
  *
  * @author Alexey Matvey
  */
-public class Settings extends PropertiesHolder {
+public class Settings extends Properties {
     
     public static final Property<Integer> PomodoroLength = new Property<Integer>("pomodoroLength", Integer.class);
     public static final Property<Integer> ShortBreakLength = new Property<Integer>("shortBreakLength", Integer.class);

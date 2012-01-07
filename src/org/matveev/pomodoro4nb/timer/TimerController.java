@@ -9,7 +9,7 @@ import org.matveev.pomodoro4nb.prefs.DefaultPreferencesProvider;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.task.TaskController;
 import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
-import org.matveev.pomodoro4nb.utils.data.Property;
+import org.matveev.pomodoro4nb.data.Property;
 
 /**
  *

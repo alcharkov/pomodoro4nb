@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.utils.data;
+package org.matveev.pomodoro4nb.data;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,15 +27,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * 
  * @author Alexey Matvey
  */
-public abstract class PropertiesHolder {
+public class Properties {
     
     private final Map<Property<?>, Object> holder;
-    private final List<PropertiesHolder> elements;
+    private final List<Properties> elements;
     private final List<PropertyListener> listeners;
     
-    public PropertiesHolder() {
+    public Properties() {
         holder = new HashMap<Property<?>, Object>();
-        elements = new CopyOnWriteArrayList<PropertiesHolder>();
+        elements = new CopyOnWriteArrayList<Properties>();
         listeners = new CopyOnWriteArrayList<PropertyListener>();
     }
     
@@ -60,15 +60,15 @@ public abstract class PropertiesHolder {
         }
     }
     
-    public void addElement(PropertiesHolder e) {
+    public void addElement(Properties e) {
         elements.add(e);
     }
     
-    public void removeElement(PropertiesHolder e) {
+    public void removeElement(Properties e) {
         elements.remove(e);
     }
     
-    public List<PropertiesHolder> getElements() {
+    public List<Properties> getElements() {
         return Collections.unmodifiableList(elements);
     }
     

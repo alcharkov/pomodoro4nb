@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import org.matveev.pomodoro4nb.controls.RolloverButton;
-import org.matveev.pomodoro4nb.utils.Utils;
+import org.matveev.pomodoro4nb.utils.Resources;
 
 /**
  *
@@ -55,7 +55,7 @@ public class PomodoroTimer extends JPanel {
         add(controlButton, BorderLayout.WEST);
 
         timeLabel = new JLabel("00:00");
-        timeLabel.setFont(Utils.createFont("digital.ttf", 20, null));
+        timeLabel.setFont(Resources.createFont("digital.ttf", 20, null));
         timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timeLabel.setOpaque(false);
         add(timeLabel);
@@ -220,7 +220,7 @@ public class PomodoroTimer extends JPanel {
     private class StartTimerAction extends AbstractAction {
 
         public StartTimerAction() {
-            super("", Utils.createIcon("media-playback-start.png"));
+            super("", Resources.createIcon("media-playback-start.png"));
         }
 
         @Override
@@ -232,7 +232,7 @@ public class PomodoroTimer extends JPanel {
     private class StopTimerAction extends AbstractAction {
 
         public StopTimerAction() {
-            super("", Utils.createIcon("media-playback-stop.png"));
+            super("", Resources.createIcon("media-playback-stop.png"));
         }
 
         @Override

@@ -44,7 +44,7 @@ import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
 import org.matveev.pomodoro4nb.timer.TimerController;
 import org.matveev.pomodoro4nb.timer.TimerController.StateInfo;
-import org.matveev.pomodoro4nb.utils.data.Property;
+import org.matveev.pomodoro4nb.data.Property;
 import org.openide.util.NbBundle;
 
 /**

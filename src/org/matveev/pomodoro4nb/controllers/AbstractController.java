@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.matveev.pomodoro4nb.utils.data.Property;
-import org.matveev.pomodoro4nb.utils.data.PropertyListener;
+import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.data.PropertyListener;
 
 /**
  *

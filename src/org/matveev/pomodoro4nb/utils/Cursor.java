@@ -1,6 +1,5 @@
 /*
- * Pomodoro4NB - Netbeans plugin for work with The Pomodoro Technique
- * Copyright (C) 2011 Alexey Matveev <mvaleksej@gmail.com>
+ * Copyright (C) 2012 Alexey Matveev <mvaleksej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.utils.data;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.matveev.pomodoro4nb.utils;
 
 /**
  *
- * @author Alexey Matveev
+ * @author Alexey Matvey
  */
-@Documented
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Immutable {
+public interface Cursor<T> {
+
+    public T next();
 }

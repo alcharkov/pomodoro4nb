@@ -20,14 +20,14 @@ package org.matveev.pomodoro4nb.task;
 
 import java.util.Date;
 import java.util.UUID;
-import org.matveev.pomodoro4nb.utils.data.PropertiesHolder;
-import org.matveev.pomodoro4nb.utils.data.Property;
+import org.matveev.pomodoro4nb.data.Properties;
+import org.matveev.pomodoro4nb.data.Property;
 
 /**
  *
  * @author Alexey Matvey
  */
-public class Task extends PropertiesHolder {
+public class Task extends Properties {
 
     public static final Property<UUID> Id = new Property<UUID>("id", UUID.class);
     public static final Property<String> Description = new Property<String>("desc", String.class);
