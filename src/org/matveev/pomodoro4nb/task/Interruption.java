@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Alexey Matveev <mvaleksej@gmail.com>
+ * Copyright (C) 2012 Alexey Matveev <mvaleksej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,25 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.controllers;
+package org.matveev.pomodoro4nb.task;
 
-import org.matveev.pomodoro4nb.utils.Handler;
-import java.awt.Container;
-import java.util.List;
-import org.matveev.pomodoro4nb.utils.Storable;
+import java.util.UUID;
+import org.matveev.pomodoro4nb.data.Properties;
 import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.data.PropertyListener;
 
 /**
  *
- * @author Alexey Matvey
+ * @author Alexey Matveev
  */
-public interface Controller extends Storable {
-    
-    public Container createUI();
-    
-    public void addPropertyListener(PropertyListener listener);
-    public void removePropertyListener(PropertyListener listener);
-    
-    public List<Handler> getHandlers(Property<?> property);
+public class Interruption extends Properties {
+    public static final Property<UUID> Parent = new Property<UUID>("parent", UUID.class);
+    public static final Property<String> Description = new Property<String>("description", String.class);
 }

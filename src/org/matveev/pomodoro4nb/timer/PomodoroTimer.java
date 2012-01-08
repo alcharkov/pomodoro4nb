@@ -220,7 +220,7 @@ public class PomodoroTimer extends JPanel {
     private class StartTimerAction extends AbstractAction {
 
         public StartTimerAction() {
-            super("", Resources.createIcon("media-playback-start.png"));
+            super("", Resources.createIcon("control_play.png"));
         }
 
         @Override
@@ -232,7 +232,7 @@ public class PomodoroTimer extends JPanel {
     private class StopTimerAction extends AbstractAction {
 
         public StopTimerAction() {
-            super("", Resources.createIcon("media-playback-stop.png"));
+            super("", Resources.createIcon("control_stop.png"));
         }
 
         @Override

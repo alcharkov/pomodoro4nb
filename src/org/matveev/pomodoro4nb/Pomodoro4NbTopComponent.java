@@ -6,12 +6,12 @@ package org.matveev.pomodoro4nb;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.util.Exceptions;
 
 /**
  * Top component which displays something.
@@ -78,22 +78,22 @@ public final class Pomodoro4NbTopComponent extends TopComponent {
     @Override
     public void componentClosed() {
     }
-
+    
     void writeProperties(java.util.Properties p) {
-//        try {
-//            tracker.storeProperties(p);
-//        } catch (IOException ex) {
-//            Exceptions.printStackTrace(ex);
-//        }
+        try {
+            mainController.store(p);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 
     void readProperties(java.util.Properties p) {
-//        try {
-//            tracker.loadProperties(p);
-//        } catch (IOException ex) {
-//            Exceptions.printStackTrace(ex);
-//        } catch (ClassNotFoundException ex) {
-//            Exceptions.printStackTrace(ex);
-//        }
+        try {
+            mainController.restore(p);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ClassNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 }

@@ -6,26 +6,26 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.Icon;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -37,14 +37,18 @@ import javax.swing.table.TableColumn;
 import org.matveev.pomodoro4nb.Notificator;
 import org.matveev.pomodoro4nb.utils.ValidatableAction;
 import org.matveev.pomodoro4nb.controllers.AbstractController;
-import org.matveev.pomodoro4nb.controllers.Handler;
-import org.matveev.pomodoro4nb.dialogs.AddAndEditTaskDialog;
+import org.matveev.pomodoro4nb.controls.netbeans.TapPanel;
+import org.matveev.pomodoro4nb.data.DefaultPropertiesSerializer;
+import org.matveev.pomodoro4nb.dialogs.TaskDialog;
 import org.matveev.pomodoro4nb.prefs.PreferencesDialog;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
 import org.matveev.pomodoro4nb.timer.TimerController;
 import org.matveev.pomodoro4nb.timer.TimerController.StateInfo;
 import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.dialogs.InterruptionDialog;
+import org.matveev.pomodoro4nb.utils.Handler;
+import org.matveev.pomodoro4nb.utils.Resources;
 import org.openide.util.NbBundle;
 
 /**
@@ -97,7 +101,8 @@ public class TaskController extends AbstractController {
                         }
                     } else if (State.BREAK.equals(newState.getState())) {
                         if (currentTask != null) {
-                            Task.increment(currentTask, Task.Pomodoros);
+                            final Integer pomodoros = currentTask.getProperty(Task.Pomodoros);
+                            currentTask.setProperty(Task.Pomodoros, new Integer(pomodoros + 1));
                             taskTable.getTaskTableModel().fireTableDataChanged();
                         }
                         Notificator.showNotificationBalloon(Notificator.KEY_START_BREAK);
@@ -115,22 +120,49 @@ public class TaskController extends AbstractController {
                 fire(TaskController.CAN_START_PROPERTY, !canStart, canStart);
 
                 if (!canStart) {
-                    actionsMap.get(AddNewTaskAction.class.getName()).actionPerformed(null);
+                    actionsMap.get(AddTaskAction.class.getName()).actionPerformed(null);
                 }
             }
         });
     }
 
+    public Container createQuickActionPanel() {
+        final TapPanel panel = new TapPanel();
+        panel.setOrientation(TapPanel.DOWN);
+        panel.setPreferredSize(new Dimension(panel.getWidth(), 20));
+
+        JToolBar tools = new JToolBar();
+        tools.setFloatable(false);
+        tools.setRollover(true);
+
+        tools.add(new AddTaskAction(taskTable, true));
+        tools.add(new RemoveTaskAction(taskTable, true));
+        tools.add(new EditTaskAction(taskTable, true));
+        tools.addSeparator();
+        tools.add(new MarkAction(taskTable, true));
+        tools.addSeparator();
+        tools.add(new ClearAlddDoneTasksAction(taskTable, true));
+        tools.add(new ChangePreferencesAction(true));
+
+        panel.add(new JPanel());
+        panel.add(tools);
+
+        return panel;
+    }
+
     private JPopupMenu createTaskTablePopupMenu() {
         JPopupMenu menu = new JPopupMenu();
 
-        addAction(menu, new AddNewTaskAction(taskTable));
+        addAction(menu, new AddTaskAction(taskTable));
         addAction(menu, new RemoveTaskAction(taskTable));
         addAction(menu, new EditTaskAction(taskTable));
         menu.addSeparator();
         addAction(menu, new MarkAction(taskTable));
         menu.addSeparator();
         menu.add(createTagsSubMenu());
+        menu.addSeparator();
+        addAction(menu, new AddInteraptionAction(taskTable));
+        addAction(menu, new AddUnplannedTaskAction(taskTable));
         menu.addSeparator();
         addAction(menu, new ClearAlddDoneTasksAction(taskTable));
         menu.addSeparator();
@@ -161,10 +193,10 @@ public class TaskController extends AbstractController {
 
     private void addAction(JPopupMenu menu, ValidatableAction action) {
         actionsMap.put(action.getClass().getName(), action);
-        
+
         JMenuItem item = new JMenuItem(action);
-        if(action instanceof ActionWithAccelerator) {
-            item.setAccelerator(((ActionWithAccelerator) action).getActionKeyStroke());
+        if (action instanceof BasicAction) {
+            item.setAccelerator(((BasicAction) action).getActionKeyStroke());
         }
         menu.add(item);
     }
@@ -192,13 +224,12 @@ public class TaskController extends AbstractController {
         return scrollPane;
     }
 
-        
     private void registerShortCuts(JComponent panel) {
         InputMap im = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = panel.getActionMap();
         for (Action action : actionsMap.values()) {
-            if (action instanceof ActionWithAccelerator) {
-                im.put(((ActionWithAccelerator) action).getActionKeyStroke(), action.getValue(Action.NAME));
+            if (action instanceof BasicAction) {
+                im.put(((BasicAction) action).getActionKeyStroke(), action.getValue(Action.NAME));
                 am.put(action.getValue(Action.NAME), action);
             }
         }
@@ -219,16 +250,36 @@ public class TaskController extends AbstractController {
         }
     }
 
-    private static String getMessage(final String key) {
-        return NbBundle.getMessage(TaskController.class, key);
+    @Override
+    public void store(java.util.Properties props) throws IOException {
+        final DefaultPropertiesSerializer serializer = new DefaultPropertiesSerializer();
+
+        final StringBuilder data = new StringBuilder();
+
+        final List<Task> taskList = taskTable.getTaskTableModel().getTaskList();
+        for (Task t : taskList) {
+            data.append(serializer.write(t));
+            data.append("\n");
+        }
+
+        props.setProperty("model", data.toString());
     }
 
     @Override
-    public void restore(Properties props) throws IOException, ClassNotFoundException {
-    }
+    public void restore(java.util.Properties props) throws IOException, ClassNotFoundException {
+        Object data = props.getProperty("data");
+        JOptionPane.showMessageDialog(null, data);
+        if (data != null) {
+            final DefaultPropertiesSerializer serializer = new DefaultPropertiesSerializer();
+            final TaskTableModel model = taskTable.getTaskTableModel();
 
-    @Override
-    public void store(Properties props) throws IOException {
+            final String[] records = ((String) data).split("\n");
+            for (String rec : records) {
+                final Task task = new Task();
+                serializer.read(task, rec);
+                model.addTask(task);
+            }
+        }
     }
 
     public Iterable<ValidatableAction> getActionList() {
@@ -236,12 +287,16 @@ public class TaskController extends AbstractController {
     }
 
     //<editor-fold defaultstate="collapsed" desc="Actions">
-    private static class MarkAction extends ActionWithAccelerator {
+    private class MarkAction extends BasicAction {
 
         private final TaskTable taskTable;
 
         public MarkAction(TaskTable taskTable) {
-            super(getMessage("buttonsMarkCompleted.text"));
+            this(taskTable, false);
+        }
+
+        public MarkAction(TaskTable taskTable, boolean showIcon) {
+            super("actionMarkTask", showIcon);
             this.taskTable = taskTable;
         }
 
@@ -256,40 +311,34 @@ public class TaskController extends AbstractController {
         public void validate() {
             setEnabled(taskTable.getSelectedRowCount() > 0);
         }
-
-        @Override
-        public KeyStroke getActionKeyStroke() {
-             return KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK);
-        }
     }
 
-    private class ChangePreferencesAction extends ActionWithAccelerator {
+    private class ChangePreferencesAction extends BasicAction {
 
         public ChangePreferencesAction() {
-            super(getMessage("buttonsPreferences.text"));
+            super("actionPreferences", false);
+        }
+
+        public ChangePreferencesAction(boolean showIcon) {
+            super("actionPreferences", showIcon);
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
             PreferencesDialog.createPreferencesDialog(provider);
         }
-
-        @Override
-        public void validate() {
-        }
-
-        @Override
-        public KeyStroke getActionKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
-        }
     }
 
-    private class ClearAlddDoneTasksAction extends ActionWithAccelerator {
+    private class ClearAlddDoneTasksAction extends BasicAction {
 
         private TaskTable table;
 
         public ClearAlddDoneTasksAction(TaskTable table) {
-            super(getMessage("buttonsClearTaskTable.text"));
+            this(table, false);
+        }
+
+        public ClearAlddDoneTasksAction(TaskTable table, boolean showIcon) {
+            super("actionClearTaskTable", showIcon);
             this.table = table;
         }
 
@@ -308,19 +357,18 @@ public class TaskController extends AbstractController {
         public void validate() {
             setEnabled(table.getRowCount() > 0);
         }
-
-        @Override
-        public KeyStroke getActionKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
-        }
     }
 
-    private class RemoveTaskAction extends ActionWithAccelerator {
+    private class RemoveTaskAction extends BasicAction {
 
-        private TaskTable table;
+        private final TaskTable table;
 
         public RemoveTaskAction(TaskTable table) {
-            super(getMessage("buttonsRemoveTask.text"));
+            this(table, false);
+        }
+
+        public RemoveTaskAction(TaskTable table, boolean showIcon) {
+            super("actionRemoveTask", showIcon);
             this.table = table;
         }
 
@@ -338,19 +386,89 @@ public class TaskController extends AbstractController {
         public void validate() {
             setEnabled(table.getSelectedRowCount() > 0);
         }
+    }
+
+    private class AddUnplannedTaskAction extends BasicAction {
+
+        private final TaskTable table;
+
+        public AddUnplannedTaskAction(TaskTable table) {
+            this(table, false);
+        }
+
+        public AddUnplannedTaskAction(TaskTable table, boolean showIcon) {
+            super("actionUnplanned", showIcon);
+            this.table = table;
+        }
 
         @Override
-        public KeyStroke getActionKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+        public void actionPerformed(ActionEvent e) {
+            final TaskTableModel model = table.getTaskTableModel();
+            final Task parentTask = model.getTask(table.getSelectedRow());
+
+            final TaskDialog dialog = new TaskDialog(null, null);
+            dialog.setVisible(true);
+
+            final Task unplanned = dialog.getResult();
+            if (unplanned != null) {
+                unplanned.setProperty(Task.Parent, parentTask.getProperty(Task.Id));
+                parentTask.addElement(unplanned);
+                model.addTask(unplanned);
+                model.fireTableDataChanged();
+            }
+        }
+
+        @Override
+        public void validate() {
+            setEnabled(table.getSelectedRowCount() > 0);
         }
     }
 
-    private class EditTaskAction extends ActionWithAccelerator {
+    private class AddInteraptionAction extends BasicAction {
+
+        private final TaskTable table;
+
+        public AddInteraptionAction(TaskTable table) {
+            this(table, false);
+        }
+
+        public AddInteraptionAction(TaskTable table, boolean showIcon) {
+            super("actionAddInterruption", showIcon);
+            this.table = table;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            final TaskTableModel model = table.getTaskTableModel();
+            final Task parentTask = model.getTask(table.getSelectedRow());
+
+            final InterruptionDialog dialog = new InterruptionDialog(null);
+            dialog.setVisible(true);
+
+            final Interruption interruption = dialog.getResult();
+            if (interruption != null) {
+                interruption.setProperty(Task.Parent, parentTask.getProperty(Task.Id));
+                parentTask.addElement(interruption);
+                model.fireTableDataChanged();
+            }
+        }
+
+        @Override
+        public void validate() {
+            setEnabled(table.getSelectedRowCount() > 0);
+        }
+    }
+
+    private class EditTaskAction extends BasicAction {
 
         private final TaskTable table;
 
         public EditTaskAction(TaskTable table) {
-            super(getMessage("buttonsEditTask.text"));
+            this(table, false);
+        }
+
+        public EditTaskAction(TaskTable table, boolean showIcon) {
+            super("actionEditTask", showIcon);
             this.table = table;
         }
 
@@ -359,7 +477,11 @@ public class TaskController extends AbstractController {
             int index = table.getSelectedRow();
             TaskTableModel model = table.getTaskTableModel();
             Task task = model.getTask(index);
-            Task updatedTask = AddAndEditTaskDialog.createAddTaskDialog(task);
+
+            final TaskDialog taskDialog = new TaskDialog(null, task);
+            taskDialog.setVisible(true);
+
+            Task updatedTask = taskDialog.getResult();
             if (updatedTask != null) {
                 model.insertTask(index, updatedTask);
                 model.fireTableDataChanged();
@@ -370,14 +492,9 @@ public class TaskController extends AbstractController {
         public void validate() {
             setEnabled(table.getSelectedRowCount() > 0);
         }
-
-        @Override
-        public KeyStroke getActionKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
-        }
     }
 
-    private class SetTagAction extends AbstractAction implements ValidatableAction {
+    private static class SetTagAction extends AbstractAction implements ValidatableAction {
 
         private TaskTable table;
         private final Task.Priority priority;
@@ -401,7 +518,7 @@ public class TaskController extends AbstractController {
         }
     }
 
-    private class NullAction extends AbstractAction implements ValidatableAction {
+    private static class NullAction extends AbstractAction implements ValidatableAction {
 
         private final TaskTable table;
 
@@ -421,18 +538,24 @@ public class TaskController extends AbstractController {
         }
     }
 
-    private class AddNewTaskAction extends ActionWithAccelerator {
+    private class AddTaskAction extends BasicAction {
 
         private final TaskTable table;
 
-        public AddNewTaskAction(TaskTable table) {
-            super(getMessage("buttonsAddNewTask.text"));
+        public AddTaskAction(TaskTable table) {
+            this(table, false);
+        }
+
+        public AddTaskAction(TaskTable table, boolean showIcon) {
+            super("actionAddNewTask", showIcon);
             this.table = table;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            final Task task = AddAndEditTaskDialog.createAddTaskDialog();
+            TaskDialog dialog = new TaskDialog(null, null);
+            dialog.setVisible(true);
+            final Task task = dialog.getResult();
             if (task != null) {
                 final TaskTableModel model = table.getTaskTableModel();
                 model.addTask(task);
@@ -447,25 +570,34 @@ public class TaskController extends AbstractController {
         public void validate() {
             // do nothing
         }
-
-        @Override
-        public KeyStroke getActionKeyStroke() {
-            return KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
-        }
     }
 
-    public static abstract class ActionWithAccelerator extends AbstractAction
-            implements ValidatableAction {
+    private abstract class BasicAction extends AbstractAction implements ValidatableAction {
 
-        public ActionWithAccelerator(String name) {
-            super(name);
+        private final KeyStroke stroke;
+
+        public BasicAction(String key, boolean showIcon) {
+            super();
+            putValue(Action.NAME, getString(key + ".text"));
+            putValue(Action.LONG_DESCRIPTION, getString(key + ".description"));
+            if (showIcon) {
+                putValue(Action.SMALL_ICON, Resources.createIcon(getString(key + ".icon")));
+            }
+            stroke = KeyStroke.getKeyStroke(getString(key + ".shortcut"));
         }
 
-        public ActionWithAccelerator(String name, Icon icon) {
-            super(name, icon);
+        @Override
+        public void validate() {
+            // do nothing
         }
 
-        public abstract KeyStroke getActionKeyStroke();
+        public final KeyStroke getActionKeyStroke() {
+            return stroke;
+        }
+
+        private String getString(String key) {
+            return NbBundle.getBundle(BasicAction.class).getString(key);
+        }
     }
 
 //</editor-fold>

@@ -24,5 +24,5 @@ public interface PropertiesSerializer {
 
     public String write(Properties props);
 
-    public Properties read(Class<? extends Properties> type, String str);
+    public Properties read(Properties props, String str);
 }

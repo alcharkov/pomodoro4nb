@@ -19,7 +19,6 @@ package org.matveev.pomodoro4nb.task;
 
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.dnd.DragSource;
 import java.awt.event.MouseEvent;

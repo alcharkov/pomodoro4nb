@@ -1,12 +1,25 @@
+/*
+ * Copyright (C) 2012 Alexey Matveev <mvaleksej@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.matveev.pomodoro4nb.task;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import javax.swing.table.AbstractTableModel;
-import org.matveev.pomodoro4nb.utils.Storable;
 import org.openide.util.NbBundle;
 
 /**
@@ -17,12 +30,12 @@ public class TaskTableModel extends AbstractTableModel {
 
     public enum Header {
 
-        //COMPLETED("", Boolean.class),
         DESCRIPTION(getString("columnDescription.title"), String.class),
         ESTIMATE(getString("columnEstimate.title"), Integer.class),
-        POMODOROS(getString("columnPomodoros.title"), Integer.class);
-        //INTERAPTIONS(getString("columnInteraptions.title"), Integer.class),
-        //UNPLANED(getString("columnUnplaned.title"), Integer.class);
+        POMODOROS(getString("columnPomodoros.title"), Integer.class),
+        INTERAPTIONS(getString("columnInteraptions.title"), Integer.class),
+        UNPLANED(getString("columnUnplaned.title"), Integer.class);
+        
         private final String title;
         private final Class type;
 
@@ -39,6 +52,7 @@ public class TaskTableModel extends AbstractTableModel {
             return type;
         }
     }
+    
     private List<Task> taskList = new ArrayList<Task>();
 
     public TaskTableModel() {
@@ -74,10 +88,10 @@ public class TaskTableModel extends AbstractTableModel {
                 return task.getProperty(Task.Estimate);
             case POMODOROS:
                 return task.getProperty(Task.Pomodoros);
-//            case INTERAPTIONS:
-//                return task.getInteraptions();
-//            case UNPLANED:
-//                return task.getUnplaned();
+            case INTERAPTIONS:
+                return task.getElements(Interruption.class).size();
+            case UNPLANED:
+                return task.getElements(Interruption.class).size();
         }
         return null;
     }

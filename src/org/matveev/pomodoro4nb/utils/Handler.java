@@ -1,4 +1,6 @@
 /*
+ * Pomodoro4NB - Netbeans plugin for work with The Pomodoro Technique
+ * 
  * Copyright (C) 2011 Alexey Matveev <mvaleksej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,25 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.controllers;
-
-import org.matveev.pomodoro4nb.utils.Handler;
-import java.awt.Container;
-import java.util.List;
-import org.matveev.pomodoro4nb.utils.Storable;
-import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.data.PropertyListener;
+package org.matveev.pomodoro4nb.utils;
 
 /**
  *
  * @author Alexey Matvey
  */
-public interface Controller extends Storable {
-    
-    public Container createUI();
-    
-    public void addPropertyListener(PropertyListener listener);
-    public void removePropertyListener(PropertyListener listener);
-    
-    public List<Handler> getHandlers(Property<?> property);
+public interface Handler<T> {
+    public void handle(T oldValue, T newValue);
 }

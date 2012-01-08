@@ -2,28 +2,26 @@ package org.matveev.pomodoro4nb;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
+import java.util.Properties;
 import javax.swing.JPanel;
 import org.matveev.pomodoro4nb.controllers.Controller;
-import org.matveev.pomodoro4nb.controllers.Handler;
+import org.matveev.pomodoro4nb.utils.Handler;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.prefs.PreferencesProviderFactory;
 import org.matveev.pomodoro4nb.task.TaskController;
-import org.matveev.pomodoro4nb.task.TaskController.ActionWithAccelerator;
 import org.matveev.pomodoro4nb.timer.TimerController;
 import org.matveev.pomodoro4nb.data.Property;
 import org.matveev.pomodoro4nb.data.PropertyListener;
+import org.matveev.pomodoro4nb.utils.Storable;
 
 /**
  *
  * @author Alexey Matvey
  */
-public class PomodoroMainController implements PropertyListener {
+public class PomodoroMainController implements PropertyListener, Storable {
 
     private final Map<String, Controller> controllers = new HashMap<String, Controller>();
     private final TimerController timerController;
@@ -66,8 +64,22 @@ public class PomodoroMainController implements PropertyListener {
             }
         }
     }
-    
+
     public PreferencesProvider getPreferencesProvider() {
         return provider;
+    }
+
+    @Override
+    public void restore(Properties props) throws IOException, ClassNotFoundException {
+        for (Storable s : controllers.values()) {
+            s.restore(props);
+        }
+    }
+
+    @Override
+    public void store(Properties props) throws IOException {
+        for (Storable s : controllers.values()) {
+            s.store(props);
+        }
     }
 }

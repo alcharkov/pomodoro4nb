@@ -46,11 +46,10 @@ public class DefaultPropertiesSerializer implements PropertiesSerializer {
     }
 
     @Override
-    public Properties read(Class<? extends Properties> type, String jsonString) {
+    public Properties read(Properties props, String jsonString) {
         try {
-            final Properties props = new Properties();
             final JSONObject parsedMap = new JSONObject(jsonString);
-            for (Field field : type.getDeclaredFields()) {
+            for (Field field : props.getClass().getDeclaredFields()) {
                 final Property<?> property = extractPropertyFrom(field);
                 if (property != null) {
                     if (parsedMap.has(property.getName())) {
