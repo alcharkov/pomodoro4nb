@@ -1,39 +1,39 @@
 h1=. Pomodoro4NB
 
-p=. !http://plugins.netbeans.org/data/images/1322877702_pomodoro2.png!
+!http://plugins.netbeans.org/data/images/1322877702_pomodoro2.png!
 
-h3=. Netbeans plugin for work with "The Pomodoro Technique":http://www.pomodorotechnique.com/
+p=. Netbeans plugin for work with "The Pomodoro Technique":http://www.pomodorotechnique.com/
 
-h3=. You can find more informations on the Pomodoro Technique on "http://www.pomodorotechnique.com/":http://www.pomodorotechnique.com/
+p=. You can find more informations about The Pomodoro Technique on "http://www.pomodorotechnique.com/":http://www.pomodorotechnique.com/
 
-h4<. Licence
+p<. +*Licence*+
 
 # Sounds are taken from "http://www.freesound.org":http://www.freesound.org and are licensed under Creative Commons
 # Icons are taken from "http://famfamfam.com/lab/icons/silk/":http://famfamfam.com/lab/icons/silk/ and are licensed under Creative Commons
 # Font by Dusit Supasawat is taken from http://www.dafont.com 
 
-h4<. Intallation
+p<. +*Intallation*+
 
-h5<. From *.NBM file
+p<. _From *.NBM file_
 
-# "Download latest version ":http://plugins.netbeans.org/plugin/40582/pomodoro4nb
+# "Download latest version":http://plugins.netbeans.org/plugin/40582/pomodoro4nb
 # Open Plugin Manager (Select _Tools->Plugin_)
 # Open "_Downloaded_" tab and select downloaded *.nbm file  
 # Click "_Intall_" button
 
-h5<. From Update Center
+p<. _From Update Center_
 
 # Open Plugin Manager (Select _Tools->Plugin_)
 # Select "_Available Plugins_" tab and enter "pomodoro4nb" to search field
 # Check corresponding plugin in available list and click "_Intall_" button
 
-h5<. From Source Code
+p<. _From Source Code_
 
 # Chekout sources
 # Open NetBeans project
 # Right click on project and  select "_Install/Reload in Development IDE_" in context menu
 
-h4<. Usages
+p<. +*Usages*+
 
 # Add one or more tasks to the task list
 # Choose a task and start the timer
@@ -41,6 +41,6 @@ h4<. Usages
 # Take a short break
 # Every 4 pomodoros take a longer break.
 
-h4<. Screenshot
+p<. +*Screenshot*+
 
-p=. !<http://plugins.netbeans.org/data/images/1322877367_mainWindow.png>!
+!http://plugins.netbeans.org/data/images/1325948426_pomodoro4nb_screenshot.png!
