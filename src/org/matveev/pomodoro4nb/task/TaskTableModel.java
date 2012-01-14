@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import org.matveev.pomodoro4nb.task.Interruption.Type;
 import org.openide.util.NbBundle;
 
 /**
@@ -89,9 +90,9 @@ public class TaskTableModel extends AbstractTableModel {
             case POMODOROS:
                 return task.getProperty(Task.Pomodoros);
             case INTERAPTIONS:
-                return task.getElements(Interruption.class).size();
+                return task.getInterruptions(Type.Interruption).size();
             case UNPLANED:
-                return task.getElements(Interruption.class).size();
+                return task.getInterruptions(Type.Unplanned).size();
         }
         return null;
     }

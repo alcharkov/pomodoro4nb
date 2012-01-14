@@ -1,5 +1,4 @@
 /*
- * Pomodoro4NB - Netbeans plugin for work with The Pomodoro Technique
  * Copyright (C) 2011 Alexey Matveev <mvaleksej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,12 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.statistics;
+package org.matveev.pomodoro4nb.backlog;
+
+import java.awt.Container;
+import org.matveev.pomodoro4nb.controllers.AbstractController;
 
 /**
  *
  * @author Alexey Matveev
  */
-public class StatisticsController {
+public class BacklogController extends AbstractController {
+
     
+    public BacklogController() {
+    }
+
+    @Override
+    public Container createUI() {
+        return null;
+    }
 }

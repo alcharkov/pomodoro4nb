@@ -19,12 +19,13 @@ package org.matveev.pomodoro4nb.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.matveev.pomodoro4nb.utils.Utils;
 
 /**
  * 
@@ -33,19 +34,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Properties {
 
     public static final Property<UUID> Id = new Property<UUID>("id", UUID.class);
-    public static final Property<Class> Type = new Property<Class>("class", Class.class);
-    
+    public static final Property<String> SerializeKey = new Property<String>("key", String.class);
+    @Ignore public static final Property<String> ClassType = new Property<String>("class", String.class);
     private final Map<Property<?>, Object> holder;
     private final List<Properties> elements;
     private final List<PropertyListener> listeners;
 
     public Properties() {
-        holder = new HashMap<Property<?>, Object>();
+        holder = new LinkedHashMap<Property<?>, Object>();
         elements = new CopyOnWriteArrayList<Properties>();
         listeners = new CopyOnWriteArrayList<PropertyListener>();
-        
+
         setProperty(Id, UUID.randomUUID());
-        setProperty(Type, getClass());
+        setProperty(ClassType, getClass().getName());
+        setProperty(SerializeKey, getClass().getSimpleName());
     }
 
     public final <T> T getProperty(Property<T> property) {
@@ -58,6 +60,12 @@ public class Properties {
     }
 
     public final <T, V> void setProperty(Property<T> property, V value) {
+        if (!property.getType().equals(value.getClass())) {
+            throw new IllegalArgumentException(
+                    "Cannot set value with type '" + value.getClass() 
+                    + "' to property with type '" + property.getType() + "'");
+        }
+        
         V oldValue = (V) holder.get(property);
         if (value != oldValue) {
             holder.put(property, value);
@@ -70,25 +78,37 @@ public class Properties {
     }
 
     public void addElement(Properties e) {
+        checkArguments(e);
         elements.add(e);
     }
 
     public void removeElement(Properties e) {
+        checkArguments(e);
         elements.remove(e);
+    }
+
+    private void checkArguments(Properties element) {
+        if (element == null) {
+            throw new IllegalArgumentException("This container cannot contain 'null' elements");
+        }
+        final Children children = getClass().getAnnotation(Children.class);
+        if (children == null || !Arrays.asList(children.value()).contains(element.getClass())) {
+            throw new IllegalArgumentException("The container '" + getClass().getName()
+                    + "' cannot contain elements with type '" + element.getClass().getName() + "'");
+        }
     }
 
     public List<Properties> getElements(Class<? extends Properties>... types) {
         final List<Properties> result = new ArrayList<Properties>();
-        final List<Class<? extends Properties>> typeList = Arrays.asList(types);
         for (Properties p : getElements()) {
-            final Class type = p.getProperty(Properties.Type);
-            if (type != null && typeList.contains(type)) {
+            final String name = p.getProperty(Properties.ClassType);
+            if (name != null && Utils.isContains(name, types)) {
                 result.add(p);
             }
         }
         return result;
     }
-    
+
     public List<Properties> getElements() {
         return Collections.unmodifiableList(elements);
     }
@@ -105,5 +125,24 @@ public class Properties {
 
     public void removePropertyListener(PropertyListener listener) {
         listeners.remove(listener);
+    }
+
+    @Override
+    public String toString() {
+        boolean first = true;
+        StringBuilder builder = new StringBuilder();
+        builder.append('{');
+        for (Map.Entry<Property<?>, Object> entry : holder.entrySet()) {
+            if (first) {
+                first = false;
+            } else {
+                builder.append(", ");
+            }
+            builder.append(entry.getKey().getName());
+            builder.append('=');
+            builder.append(entry.getValue());
+        }
+        builder.append('}');
+        return builder.toString();
     }
 }

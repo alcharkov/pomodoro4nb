@@ -14,15 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.task;
-
-import org.matveev.pomodoro4nb.data.Children;
-import org.matveev.pomodoro4nb.data.Properties;
+package org.matveev.pomodoro4nb.data.io;
 
 /**
  *
  * @author Alexey Matveev
  */
-@Children({Task.class})
-public class Activity extends Properties {
+public class PropertiesSerializerFactory {
+
+    public static PropertiesSerializer createXMLSerializer() {
+        return new XMLPropertiesSerializer();
+    }
+
+    public static PropertiesSerializer createJSONSerializer() {
+        return new JsonPropertiesSerializer();
+    }
 }

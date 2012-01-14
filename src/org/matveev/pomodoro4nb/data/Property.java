@@ -62,4 +62,9 @@ public class Property<T> {
         hash = 23 * hash + (this.type != null ? this.type.hashCode() : 0);
         return hash;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" + "name=" + name + ", type=" + type + '}';
+    }
 }

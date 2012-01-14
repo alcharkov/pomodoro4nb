@@ -8,7 +8,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +37,7 @@ import org.matveev.pomodoro4nb.Notificator;
 import org.matveev.pomodoro4nb.utils.ValidatableAction;
 import org.matveev.pomodoro4nb.controllers.AbstractController;
 import org.matveev.pomodoro4nb.controls.netbeans.TapPanel;
-import org.matveev.pomodoro4nb.data.DefaultPropertiesSerializer;
+import org.matveev.pomodoro4nb.data.Properties;
 import org.matveev.pomodoro4nb.dialogs.TaskDialog;
 import org.matveev.pomodoro4nb.prefs.PreferencesDialog;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
@@ -46,7 +45,10 @@ import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
 import org.matveev.pomodoro4nb.timer.TimerController;
 import org.matveev.pomodoro4nb.timer.TimerController.StateInfo;
 import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.data.io.PropertiesSerializer;
+import org.matveev.pomodoro4nb.data.io.PropertiesSerializerFactory;
 import org.matveev.pomodoro4nb.dialogs.InterruptionDialog;
+import org.matveev.pomodoro4nb.utils.Base64Coder;
 import org.matveev.pomodoro4nb.utils.Handler;
 import org.matveev.pomodoro4nb.utils.Resources;
 import org.openide.util.NbBundle;
@@ -60,6 +62,7 @@ public class TaskController extends AbstractController {
     public static final String TASK_CONTROLLER_ID = "taskController";
     //<editor-fold defaultstate="collapsed" desc="Properties">
     public static final Property<Task> TASK_ADDED_PROPERTY = new Property<Task>("taskAdded", Task.class);
+    public static final Property<Interruption> INTERRUPTION_ADDED_PROPERTY = new Property<Interruption>("interrAdded", Interruption.class);
     public static final Property<Task> TASK_REMOVED_PROPERTY = new Property<Task>("taskRemoved", Task.class);
     public static final Property<Boolean> ACTIVE_REMOVED_PROPERTY = new Property<Boolean>("activeRemoved", Boolean.class);
     public static final Property<Boolean> CAN_START_PROPERTY = new Property<Boolean>("canStart", Boolean.class);
@@ -251,33 +254,30 @@ public class TaskController extends AbstractController {
     }
 
     @Override
-    public void store(java.util.Properties props) throws IOException {
-        final DefaultPropertiesSerializer serializer = new DefaultPropertiesSerializer();
+    public void store(java.util.Properties props) throws Exception {
+        final PropertiesSerializer serializer = PropertiesSerializerFactory.createXMLSerializer();
 
         final StringBuilder data = new StringBuilder();
 
         final List<Task> taskList = taskTable.getTaskTableModel().getTaskList();
         for (Task t : taskList) {
-            data.append(serializer.write(t));
+            data.append(serializer.serialize(t));
             data.append("\n");
         }
 
-        props.setProperty("model", data.toString());
+        props.setProperty("model", Base64Coder.encodeString(data.toString()));
     }
 
-    @Override
-    public void restore(java.util.Properties props) throws IOException, ClassNotFoundException {
+    public void restore(java.util.Properties props) throws Exception {
         Object data = props.getProperty("data");
         JOptionPane.showMessageDialog(null, data);
         if (data != null) {
-            final DefaultPropertiesSerializer serializer = new DefaultPropertiesSerializer();
+            final PropertiesSerializer serializer = PropertiesSerializerFactory.createXMLSerializer();
+            final String xmlString = Base64Coder.decodeString((String) data);
             final TaskTableModel model = taskTable.getTaskTableModel();
-
-            final String[] records = ((String) data).split("\n");
-            for (String rec : records) {
-                final Task task = new Task();
-                serializer.read(task, rec);
-                model.addTask(task);
+            Activity activity = (Activity) serializer.deserealize(xmlString);
+            for (Properties p : activity.getElements()) {
+                model.addTask((Task) p);
             }
         }
     }
@@ -406,15 +406,24 @@ public class TaskController extends AbstractController {
             final TaskTableModel model = table.getTaskTableModel();
             final Task parentTask = model.getTask(table.getSelectedRow());
 
-            final TaskDialog dialog = new TaskDialog(null, null);
+            final TaskDialog dialog = new TaskDialog();
             dialog.setVisible(true);
 
             final Task unplanned = dialog.getResult();
             if (unplanned != null) {
                 unplanned.setProperty(Task.Parent, parentTask.getProperty(Task.Id));
-                parentTask.addElement(unplanned);
+
+                Interruption interrupt = new Interruption();
+                interrupt.setProperty(Interruption.Parent, parentTask.getProperty(Task.Id));
+                interrupt.setProperty(Interruption.InterruptionType, Interruption.Type.Unplanned);
+                interrupt.setProperty(Interruption.Description, "Created unplaned task");
+
+                parentTask.addElement(interrupt);
+
                 model.addTask(unplanned);
                 model.fireTableDataChanged();
+
+                fire(INTERRUPTION_ADDED_PROPERTY, null, interrupt);
             }
         }
 
@@ -442,12 +451,13 @@ public class TaskController extends AbstractController {
             final TaskTableModel model = table.getTaskTableModel();
             final Task parentTask = model.getTask(table.getSelectedRow());
 
-            final InterruptionDialog dialog = new InterruptionDialog(null);
+            final InterruptionDialog dialog = new InterruptionDialog();
             dialog.setVisible(true);
 
             final Interruption interruption = dialog.getResult();
             if (interruption != null) {
                 interruption.setProperty(Task.Parent, parentTask.getProperty(Task.Id));
+                interruption.setProperty(Interruption.InterruptionType, Interruption.Type.Interruption);
                 parentTask.addElement(interruption);
                 model.fireTableDataChanged();
             }
@@ -478,7 +488,7 @@ public class TaskController extends AbstractController {
             TaskTableModel model = table.getTaskTableModel();
             Task task = model.getTask(index);
 
-            final TaskDialog taskDialog = new TaskDialog(null, task);
+            final TaskDialog taskDialog = new TaskDialog(task);
             taskDialog.setVisible(true);
 
             Task updatedTask = taskDialog.getResult();
@@ -553,7 +563,7 @@ public class TaskController extends AbstractController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            TaskDialog dialog = new TaskDialog(null, null);
+            TaskDialog dialog = new TaskDialog();
             dialog.setVisible(true);
             final Task task = dialog.getResult();
             if (task != null) {
@@ -599,11 +609,12 @@ public class TaskController extends AbstractController {
             return NbBundle.getBundle(BasicAction.class).getString(key);
         }
     }
-
 //</editor-fold>
     private void validaActions() {
         for (ValidatableAction a : actionsMap.values()) {
             a.validate();
+
+
         }
     }
 

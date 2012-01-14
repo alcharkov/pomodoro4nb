@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Alexey Matveev <mvaleksej@gmail.com>
+ * Copyright (C) 2012 Alexey Matveev <mvaleksej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,15 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.data;
+package org.matveev.pomodoro4nb.data.io;
+
+import org.matveev.pomodoro4nb.data.Properties;
 
 /**
  *
- * @author Alexey Matvey
+ * @author Alexey Matveev
  */
 public interface PropertiesSerializer {
 
-    public String write(Properties props);
+    public String serialize(Properties container) throws Exception;
 
-    public Properties read(Properties props, String str);
+    public Properties deserealize(String xmlString) throws Exception;
 }

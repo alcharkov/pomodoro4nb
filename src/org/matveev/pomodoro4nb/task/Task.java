@@ -21,26 +21,42 @@ package org.matveev.pomodoro4nb.task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.matveev.pomodoro4nb.data.Children;
 import org.matveev.pomodoro4nb.data.Properties;
 import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.task.Interruption.Type;
 
 /**
  *
  * @author Alexey Matvey
  */
+@Children({Interruption.class})
 public class Task extends Properties {
 
     public static final Property<UUID> Parent = new Property<UUID>("parent", UUID.class);
     public static final Property<String> Description = new Property<String>("desc", String.class);
     public static final Property<Integer> Estimate = new Property<Integer>("estimate", Integer.class);
     public static final Property<Integer> Pomodoros = new Property<Integer>("pomodoros", Integer.class);
+    public static final Property<Long> Created = new Property<Long>("created", Long.class);
     public static final Property<Boolean> Completed = new Property<Boolean>("completed", Boolean.class);
     public static final Property<Priority> TaskPriority = new Property<Priority>("priority", Priority.class);
     public static final Property<Status> TaskStatus = new Property<Status>("status", Status.class);
 
     public Task() {
+        setProperty(Created, System.currentTimeMillis());
         setProperty(Estimate, 0);
         setProperty(Pomodoros, 0);
+    }
+    
+    public List<Interruption> getInterruptions(Type type) {
+        final List<Interruption> result = new ArrayList<Interruption>();
+        final List<Properties> elements = getElements(Interruption.class);
+        for (Properties e : elements) {
+            if (type.equals(e.getProperty(Interruption.InterruptionType))) {
+                result.add((Interruption) e);
+            }
+        }
+        return result;
     }
     
     public enum Priority {

@@ -39,8 +39,12 @@ public class TaskDialog extends AbstractDialog<Task> {
     private JSpinner estimateSpinner;
     private final Task taskToEdit;
 
-    public TaskDialog(Window parent, Task toEdit) {
-        super(parent, "TaskDialog");
+    public TaskDialog() {
+        this(null);
+    }
+    
+    public TaskDialog(Task toEdit) {
+        super("TaskDialog");
         this.taskToEdit = toEdit;
     }
 

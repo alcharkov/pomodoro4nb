@@ -14,15 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.task;
+package org.matveev.pomodoro4nb.backlog;
 
 import org.matveev.pomodoro4nb.data.Children;
 import org.matveev.pomodoro4nb.data.Properties;
+import org.matveev.pomodoro4nb.task.Interruption;
+import org.matveev.pomodoro4nb.task.Task;
 
 /**
  *
  * @author Alexey Matveev
  */
-@Children({Task.class})
-public class Activity extends Properties {
+@Children({Task.class, Interruption.class})
+public class Backlog extends Properties {
+    
 }

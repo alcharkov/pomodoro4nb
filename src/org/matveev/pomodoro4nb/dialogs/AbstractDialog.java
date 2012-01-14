@@ -40,11 +40,11 @@ public abstract class AbstractDialog<T> extends JDialog {
     
     private DialogResult dialogResult = DialogResult.Cancel;
 
-    public AbstractDialog(Window owner, String key) {
-        super(owner);
+    public AbstractDialog(String key) {
         setTitle(getString(key + ".title"));
         setModal(true);
         setResizable(false);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         final Dimension size = new Dimension(65, 24);

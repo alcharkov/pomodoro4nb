@@ -16,6 +16,8 @@
  */
 package org.matveev.pomodoro4nb.controllers;
 
+import java.io.IOException;
+import java.util.Properties;
 import org.matveev.pomodoro4nb.utils.Handler;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,5 +78,15 @@ public abstract class AbstractController implements Controller {
     @Override
     public void removePropertyListener(PropertyListener listener) {
         listeners.remove(listener);
+    }
+
+    @Override
+    public void store(Properties props) throws Exception {
+        // do nothing
+    }
+
+    @Override
+    public void restore(Properties props) throws Exception{
+        // do nothing
     }
 }

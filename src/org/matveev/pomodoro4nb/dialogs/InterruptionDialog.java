@@ -33,8 +33,8 @@ public class InterruptionDialog extends AbstractDialog<Interruption> {
 
     private JTextField descriptionField;
 
-    public InterruptionDialog(Window owner) {
-        super(owner, "InterruptionDialog");
+    public InterruptionDialog() {
+        super("InterruptionDialog");
     }
 
     @Override

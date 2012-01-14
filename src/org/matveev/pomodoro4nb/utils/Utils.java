@@ -18,6 +18,7 @@ package org.matveev.pomodoro4nb.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import org.matveev.pomodoro4nb.data.Properties;
 
 /**
  *
@@ -52,5 +53,15 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static boolean isContains(String name, Class<? extends Properties>[] types) {
+        for (Class<? extends Properties> type : types) {
+            if (type.getSimpleName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+            
     }
 }

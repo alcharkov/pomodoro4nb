@@ -18,7 +18,6 @@
  */
 package org.matveev.pomodoro4nb.utils;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -26,6 +25,6 @@ import java.util.Properties;
  * @author Alexey Matveev
  */
 public interface Storable {
-    public void restore(Properties props) throws IOException, ClassNotFoundException;
-    public void store(Properties props) throws IOException;
+    public void restore(Properties props) throws Exception;
+    public void store(Properties props) throws Exception;
 }

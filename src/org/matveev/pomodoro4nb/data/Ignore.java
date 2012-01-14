@@ -14,15 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.task;
+package org.matveev.pomodoro4nb.data;
 
-import org.matveev.pomodoro4nb.data.Children;
-import org.matveev.pomodoro4nb.data.Properties;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
  * @author Alexey Matveev
  */
-@Children({Task.class})
-public class Activity extends Properties {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface Ignore {
+    
 }

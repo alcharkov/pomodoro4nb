@@ -14,15 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.task;
+package org.matveev.pomodoro4nb.data.io;
 
-import org.matveev.pomodoro4nb.data.Children;
 import org.matveev.pomodoro4nb.data.Properties;
 
 /**
  *
  * @author Alexey Matveev
  */
-@Children({Task.class})
-public class Activity extends Properties {
+public class JsonPropertiesSerializer implements PropertiesSerializer {
+
+    @Override
+    public String serialize(Properties container) {
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
+    @Override
+    public Properties deserealize(String xmlString) {
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
 }
