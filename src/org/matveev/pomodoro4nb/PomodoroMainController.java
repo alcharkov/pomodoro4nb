@@ -70,14 +70,14 @@ public class PomodoroMainController implements PropertyListener, Storable {
     }
 
     @Override
-    public void restore(Properties props) throws IOException, ClassNotFoundException {
+    public void restore(Properties props) throws Exception {
         for (Storable s : controllers.values()) {
             s.restore(props);
         }
     }
 
     @Override
-    public void store(Properties props) throws IOException {
+    public void store(Properties props) throws Exception {
         for (Storable s : controllers.values()) {
             s.store(props);
         }

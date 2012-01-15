@@ -78,11 +78,11 @@ public final class Pomodoro4NbTopComponent extends TopComponent {
     @Override
     public void componentClosed() {
     }
-    
+
     void writeProperties(java.util.Properties p) {
         try {
             mainController.store(p);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
     }
@@ -90,10 +90,8 @@ public final class Pomodoro4NbTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         try {
             mainController.restore(p);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
     }
-}
+} 

@@ -57,7 +57,7 @@ public class Utils {
 
     public static boolean isContains(String name, Class<? extends Properties>[] types) {
         for (Class<? extends Properties> type : types) {
-            if (type.getSimpleName().equals(name)) {
+            if (type.getName().equals(name)) {
                 return true;
             }
         }

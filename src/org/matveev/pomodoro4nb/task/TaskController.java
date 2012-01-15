@@ -268,8 +268,9 @@ public class TaskController extends AbstractController {
         props.setProperty("model", Base64Coder.encodeString(data.toString()));
     }
 
+    @Override
     public void restore(java.util.Properties props) throws Exception {
-        Object data = props.getProperty("data");
+        Object data = props.getProperty("model");
         JOptionPane.showMessageDialog(null, data);
         if (data != null) {
             final PropertiesSerializer serializer = PropertiesSerializerFactory.createXMLSerializer();
