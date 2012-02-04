@@ -2,7 +2,6 @@ package org.matveev.pomodoro4nb;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -42,6 +41,20 @@ public class PomodoroMainController implements PropertyListener, Storable {
         content.add(controllers.get(TimerController.TIMER_CONTROLLER_ID).createUI(), BorderLayout.NORTH);
         content.add(controllers.get(TaskController.TASK_CONTROLLER_ID).createUI(), BorderLayout.CENTER);
         return content;
+    }
+
+    public void createQuickActionPanel(Container c) {
+        c.add(taskController.createQuickActionPanel(), BorderLayout.SOUTH);
+    }
+
+    public final <T> T getProperty(Property<T> property) {
+        for (Controller c : controllers.values()) {
+            final T value = c.getProperty(property);
+            if (value != null) {
+                return value;
+            }
+        }
+        return null;
     }
 
     public final void registerSubController(String indentifier, Controller c) {

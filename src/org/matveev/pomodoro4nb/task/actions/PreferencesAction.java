@@ -14,24 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.data.io;
+package org.matveev.pomodoro4nb.task.actions;
 
-import org.matveev.pomodoro4nb.data.Properties;
+import java.awt.event.ActionEvent;
+import org.matveev.pomodoro4nb.prefs.PreferencesDialog;
+import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 
 /**
  *
  * @author Alexey Matveev
  */
-public class JsonPropertiesSerializer implements PropertiesSerializer {
+public class PreferencesAction extends BasicAction {
 
-    @Override
-    public String serialize(Properties container) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    private final PreferencesProvider provider;
+
+    public PreferencesAction(PreferencesProvider provider) {
+        super("actionPreferences");
+        this.provider = provider;
     }
 
     @Override
-    public Properties deserealize(String strData) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    public void actionPerformed(ActionEvent e) {
+        PreferencesDialog.createPreferencesDialog(provider);
     }
-
 }

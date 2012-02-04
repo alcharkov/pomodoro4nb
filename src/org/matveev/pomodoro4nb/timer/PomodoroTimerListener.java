@@ -9,6 +9,4 @@ import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
 /*package*/ interface PomodoroTimerListener {
 
     public void stateChanged(State state, boolean forced);
-    public void preStart();
-    
 }

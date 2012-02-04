@@ -81,7 +81,16 @@ public class Properties {
         checkArguments(e);
         elements.add(e);
     }
+    
+    public void addElement(int index, Properties e) {
+        checkArguments(e);
+        elements.add(index, e);
+    }
 
+    public void removeElement(int index) {
+        elements.remove(index);
+    }
+    
     public void removeElement(Properties e) {
         checkArguments(e);
         elements.remove(e);

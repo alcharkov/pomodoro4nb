@@ -33,11 +33,6 @@ public class TimerController extends AbstractController {
                 final StateInfo info = new StateInfo(state, forced);
                 fire(STATE_CHANGED_PROPERTY, null, info);
             }
-
-            @Override
-            public void preStart() {
-                fire(PRE_START_TIMER_PROPERTY, null, null);
-            }
         });
 
         provider.addPrefrencesListener(new PreferencesProvider.PreferencesListener() {
@@ -48,8 +43,7 @@ public class TimerController extends AbstractController {
             }
         });
 
-        //<editor-fold defaultstate="collapsed" desc="Register handlers">
-        registerHandler(TaskController.ACTIVE_REMOVED_PROPERTY, new Handler<Boolean>() {
+        registerHandler(TaskController.ActiveTaskRemovedProperty, new Handler<Boolean>() {
 
             @Override
             public void handle(Boolean oldValue, Boolean newValue) {
@@ -58,17 +52,6 @@ public class TimerController extends AbstractController {
                 }
             }
         });
-
-        registerHandler(TaskController.CAN_START_PROPERTY, new Handler<Boolean>() {
-
-            @Override
-            public void handle(Boolean oldValue, Boolean newValue) {
-                if (Boolean.TRUE.equals(newValue)) {
-                    timer.forcedStart();
-                }
-            }
-        });
-        //</editor-fold>
     }
 
     private static PomodoroTimerData createTimerDataForPrefs(PreferencesProvider provider) {

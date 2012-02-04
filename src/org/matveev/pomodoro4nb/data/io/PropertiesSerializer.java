@@ -26,5 +26,5 @@ public interface PropertiesSerializer {
 
     public String serialize(Properties container) throws Exception;
 
-    public Properties deserealize(String xmlString) throws Exception;
+    public Properties deserealize(String strData) throws Exception;
 }

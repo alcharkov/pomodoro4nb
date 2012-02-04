@@ -30,6 +30,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import org.matveev.pomodoro4nb.task.Task.Priority;
 import org.openide.util.NbBundle;
@@ -45,7 +46,7 @@ public class TaskTable extends JTable {
     private final TableCellRenderer renderer;
 
     public TaskTable() {
-        super(new TaskTableModel());
+        super(new TaskTableModel(new Activity()));
         renderer = new AlignmentTableCellRenderer();
         setUI(new TaskTableDragAndDropUI());
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

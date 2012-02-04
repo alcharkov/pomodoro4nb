@@ -63,7 +63,7 @@ public class PomodoroTimer extends JPanel {
 
     /*package*/ void setTimerData(PomodoroTimerData data) {
         this.data = data;
-        if(state == State.IDLE) {
+        if (state == State.IDLE) {
             updateGUI();
         }
     }
@@ -95,13 +95,6 @@ public class PomodoroTimer extends JPanel {
     protected void fireStateChanged() {
         for (PomodoroTimerListener l : timerListeners) {
             l.stateChanged(state, isForcedStateChange);
-        }
-        isForcedStateChange = false;
-    }
-
-    protected void firePreStart() {
-        for (PomodoroTimerListener l : timerListeners) {
-            l.preStart();
         }
         isForcedStateChange = false;
     }
@@ -225,7 +218,8 @@ public class PomodoroTimer extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            firePreStart();
+            isForcedStateChange = true;
+            setState(State.WORK);
         }
     }
 

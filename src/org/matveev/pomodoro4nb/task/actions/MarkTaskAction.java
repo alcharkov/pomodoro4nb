@@ -14,24 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.data.io;
+package org.matveev.pomodoro4nb.task.actions;
 
-import org.matveev.pomodoro4nb.data.Properties;
+import java.awt.event.ActionEvent;
+import org.matveev.pomodoro4nb.task.Task;
+import org.matveev.pomodoro4nb.task.TaskTable;
 
 /**
  *
  * @author Alexey Matveev
  */
-public class JsonPropertiesSerializer implements PropertiesSerializer {
+public class MarkTaskAction extends BasicAction {
 
-    @Override
-    public String serialize(Properties container) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    private final TaskTable table;
+
+    public MarkTaskAction(TaskTable table) {
+        super("actionMarkTask");
+        this.table = table;
     }
 
     @Override
-    public Properties deserealize(String strData) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    public void actionPerformed(ActionEvent e) {
+        final Task task = table.getTaskTableModel().getTask(table.getSelectedRow());
+        task.setProperty(Task.Completed, !Boolean.TRUE.equals(task.getProperty(Task.Completed)));
+        table.getTaskTableModel().fireTableDataChanged();
     }
 
+    @Override
+    public void validate() {
+        setEnabled(table.getSelectedRowCount() > 0);
+    }
 }

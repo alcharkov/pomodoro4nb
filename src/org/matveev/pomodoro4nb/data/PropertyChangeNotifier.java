@@ -14,24 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.data.io;
-
-import org.matveev.pomodoro4nb.data.Properties;
+package org.matveev.pomodoro4nb.data;
 
 /**
  *
  * @author Alexey Matveev
  */
-public class JsonPropertiesSerializer implements PropertiesSerializer {
+public interface PropertyChangeNotifier {
 
-    @Override
-    public String serialize(Properties container) {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
+    public void addPropertyListener(PropertyListener listener);
 
-    @Override
-    public Properties deserealize(String strData) {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
+    public void removePropertyListener(PropertyListener listener);
 
+    public void fire(Property<?> property, Object oldValue, Object newValue);
 }

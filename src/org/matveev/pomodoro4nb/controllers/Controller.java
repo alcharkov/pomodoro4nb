@@ -21,18 +21,19 @@ import java.awt.Container;
 import java.util.List;
 import org.matveev.pomodoro4nb.utils.Storable;
 import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.data.PropertyListener;
+import org.matveev.pomodoro4nb.data.PropertyChangeNotifier;
 
 /**
  *
  * @author Alexey Matvey
  */
-public interface Controller extends Storable {
-    
+public interface Controller extends Storable, PropertyChangeNotifier {
+
     public Container createUI();
-    
-    public void addPropertyListener(PropertyListener listener);
-    public void removePropertyListener(PropertyListener listener);
-    
+
     public List<Handler> getHandlers(Property<?> property);
+
+    public <T> T getProperty(Property<T> property);
+
+    public <T, V> void putProperty(Property<T> property, V value);
 }

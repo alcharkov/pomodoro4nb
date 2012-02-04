@@ -6,6 +6,7 @@ package org.matveev.pomodoro4nb;
 
 import java.awt.BorderLayout;
 import java.io.IOException;
+import javax.swing.JComponent;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -42,6 +43,7 @@ public final class Pomodoro4NbTopComponent extends TopComponent {
     private void additionalInit() {
         setLayout(new BorderLayout());
         add(mainController.createContent());
+        mainController.createQuickActionPanel(this);
     }
 
     @Override

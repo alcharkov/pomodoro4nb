@@ -16,6 +16,9 @@
  */
 package org.matveev.pomodoro4nb.task;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.matveev.pomodoro4nb.data.Children;
 import org.matveev.pomodoro4nb.data.Properties;
 
@@ -24,5 +27,27 @@ import org.matveev.pomodoro4nb.data.Properties;
  * @author Alexey Matveev
  */
 @Children({Task.class})
-public class Activity extends Properties {
+public class Activity extends Properties {    
+    
+    public int getTaskCount() {
+        return getElements().size();
+    }
+    
+    public Task getTask(int index) {
+        return (Task) getElements().get(index);
+    }
+    
+    public void removeAllTasks() {
+        for (Properties e : getElements()) {
+            removeElement(e);
+        }
+    }
+    
+    public List<Task> getTaskList() {
+        final List<Task> result = new ArrayList<Task>();
+        for (Properties e : getElements()) {
+            result.add((Task) e);
+        }
+        return Collections.unmodifiableList(result);
+    }
 }

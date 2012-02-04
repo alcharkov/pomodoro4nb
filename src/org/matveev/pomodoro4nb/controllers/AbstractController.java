@@ -16,14 +16,13 @@
  */
 package org.matveev.pomodoro4nb.controllers;
 
-import java.io.IOException;
-import java.util.Properties;
 import org.matveev.pomodoro4nb.utils.Handler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.matveev.pomodoro4nb.data.Properties;
 import org.matveev.pomodoro4nb.data.Property;
 import org.matveev.pomodoro4nb.data.PropertyListener;
 
@@ -35,8 +34,19 @@ public abstract class AbstractController implements Controller {
 
     private final List<PropertyListener> listeners = new ArrayList<PropertyListener>();
     private final Map<Property<?>, List<Handler>> handlers = new HashMap<Property<?>, List<Handler>>();
+    private final Properties properties = new Properties();
 
     public AbstractController() {
+    }
+
+    @Override
+    public final <T> T getProperty(Property<T> property) {
+        return properties.getProperty(property);
+    }
+
+    @Override
+    public final <T, V> void putProperty(Property<T> property, V value) {
+        properties.setProperty(property, value);
     }
 
     public void registerHandler(Property<?> property, Handler handler) {
@@ -64,12 +74,6 @@ public abstract class AbstractController implements Controller {
         return Collections.emptyList();
     }
 
-    protected void fire(Property<?> property, Object oldValue, Object newValue) {
-        for (PropertyListener l : listeners) {
-            l.propertyChange(property, oldValue, newValue);
-        }
-    }
-
     @Override
     public void addPropertyListener(PropertyListener listener) {
         listeners.add(listener);
@@ -81,12 +85,19 @@ public abstract class AbstractController implements Controller {
     }
 
     @Override
-    public void store(Properties props) throws Exception {
+    public void fire(Property<?> property, Object oldValue, Object newValue) {
+        for (PropertyListener l : listeners) {
+            l.propertyChange(property, oldValue, newValue);
+        }
+    }
+
+    @Override
+    public void store(java.util.Properties props) throws Exception {
         // do nothing
     }
 
     @Override
-    public void restore(Properties props) throws Exception{
+    public void restore(java.util.Properties props) throws Exception {
         // do nothing
     }
 }

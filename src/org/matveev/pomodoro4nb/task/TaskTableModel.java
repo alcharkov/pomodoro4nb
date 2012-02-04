@@ -16,7 +16,6 @@
  */
 package org.matveev.pomodoro4nb.task;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -54,14 +53,20 @@ public class TaskTableModel extends AbstractTableModel {
         }
     }
     
-    private List<Task> taskList = new ArrayList<Task>();
+    private final Activity activity;
 
-    public TaskTableModel() {
+    public TaskTableModel(Activity activity) {
+        this.activity = activity;
     }
-
+    
+    /*package*/ Activity getActivity() {
+        return activity;
+    }
+    
+    
     @Override
     public int getRowCount() {
-        return taskList.size();
+        return activity.getTaskCount();
     }
 
     @Override
@@ -81,7 +86,7 @@ public class TaskTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int row, int column) {
-        final Task task = taskList.get(row);
+        final Task task = activity.getTask(row);
         switch (Header.values()[column]) {
             case DESCRIPTION:
                 return task.getProperty(Task.Description);
@@ -98,40 +103,42 @@ public class TaskTableModel extends AbstractTableModel {
     }
 
     public List<Task> getTaskList() {
-        return Collections.unmodifiableList(taskList);
+        return activity.getTaskList();
     }
 
     public Task getTask(int index) {
-        return taskList.get(index);
+        return activity.getTask(index);
     }
 
     public void moveTask(int fromIndex, int toIndex) {
-        taskList.add(toIndex, taskList.remove(fromIndex));
+        final Task task = activity.getTask(fromIndex);
+        activity.removeElement(task);
+        activity.addElement(toIndex, task);
         fireTableDataChanged();
     }
 
     public void addTask(final Task task) {
-        taskList.add(task);
+        activity.addElement(task);
         fireTableDataChanged();
     }
 
     public void insertTask(int index, Task updatedTask) {
-        taskList.remove(index);
-        taskList.add(index, updatedTask);
+        activity.removeElement(index);
+        activity.addElement(index, updatedTask);
     }
 
-    public void removeTask(int ix) {
-        taskList.remove(ix);
+    public void removeTask(int index) {
+        activity.removeElement(index);
         fireTableDataChanged();
     }
 
     public void removeTask(final Task task) {
-        taskList.remove(task);
+        activity.removeElement(task);
         fireTableDataChanged();
     }
 
     public void removeAllTasks() {
-        taskList.clear();
+        activity.removeAllTasks();
         fireTableDataChanged();
     }
 

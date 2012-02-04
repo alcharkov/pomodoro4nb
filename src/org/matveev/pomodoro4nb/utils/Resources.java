@@ -36,6 +36,9 @@ public final class Resources {
     private static final String SOUNDS_PACKAGE = "/org/matveev/pomodoro4nb/resources/sounds/";
 
     public static Icon createIcon(final String iconName) {
+        if (iconName == null) {
+            return null;
+        }
         return new ImageIcon(Resources.class.getResource(IMAGES_PACKAGE + iconName));
     }
 
