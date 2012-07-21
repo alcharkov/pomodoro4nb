@@ -43,7 +43,7 @@ public final class Pomodoro4NbTopComponent extends TopComponent {
     private void additionalInit() {
         setLayout(new BorderLayout());
         add(mainController.createContent());
-        mainController.createQuickActionPanel(this);
+        // mainController.createQuickActionPanel(this);
     }
 
     @Override
