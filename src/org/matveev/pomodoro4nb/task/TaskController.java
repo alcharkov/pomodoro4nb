@@ -287,6 +287,10 @@ public class TaskController extends AbstractController {
         }
     }
 
+    public Task getCurretTask() {
+        return currentTask;
+    }
+
     private static final class PopupListener extends MouseAdapter {
 
         private final JPopupMenu popup;

@@ -36,13 +36,7 @@ public class ClearFinishedTaskAction extends BasicAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        TaskTableModel model = table.getTaskTableModel();
-        for (int ix = 0; ix < model.getRowCount(); ix++) {
-            Task task = model.getTask(ix);
-            if (Boolean.TRUE.equals(task.getProperty(Task.Completed))) {
-                model.removeTask(ix);
-            }
-        }
+        table.getTaskTableModel().removeAllDoneTasks();
     }
 
     @Override

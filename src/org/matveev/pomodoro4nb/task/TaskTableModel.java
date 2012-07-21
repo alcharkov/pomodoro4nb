@@ -16,7 +16,6 @@
  */
 package org.matveev.pomodoro4nb.task;
 
-import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.matveev.pomodoro4nb.task.Interruption.Type;
@@ -35,7 +34,6 @@ public class TaskTableModel extends AbstractTableModel {
         POMODOROS(getString("columnPomodoros.title"), Integer.class),
         INTERAPTIONS(getString("columnInteraptions.title"), Integer.class),
         UNPLANED(getString("columnUnplaned.title"), Integer.class);
-        
         private final String title;
         private final Class type;
 
@@ -52,18 +50,18 @@ public class TaskTableModel extends AbstractTableModel {
             return type;
         }
     }
-    
     private final Activity activity;
 
     public TaskTableModel(Activity activity) {
         this.activity = activity;
     }
-    
-    /*package*/ Activity getActivity() {
+
+    /*
+     * package
+     */ Activity getActivity() {
         return activity;
     }
-    
-    
+
     @Override
     public int getRowCount() {
         return activity.getTaskCount();
@@ -138,7 +136,16 @@ public class TaskTableModel extends AbstractTableModel {
     }
 
     public void removeAllTasks() {
-        activity.removeAllTasks();
+        activity.removeElements();
+        fireTableDataChanged();
+    }
+
+    public void removeAllDoneTasks() {
+        for (Task task : getTaskList()) {
+            if (Boolean.TRUE.equals(task.getProperty(Task.Completed))) {
+                removeTask(task);
+            }
+        }
         fireTableDataChanged();
     }
 

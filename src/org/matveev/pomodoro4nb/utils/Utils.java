@@ -19,6 +19,7 @@ package org.matveev.pomodoro4nb.utils;
 import java.util.Arrays;
 import java.util.List;
 import org.matveev.pomodoro4nb.data.Properties;
+import org.matveev.pomodoro4nb.data.Property;
 
 /**
  *
@@ -62,6 +63,14 @@ public class Utils {
             }
         }
         return false;
-            
+    }
+    
+    public static boolean isPropertiesEqual(Properties first, Properties second, Property<?> property) {
+        if (first == null || second == null) {
+            return false;
+        }
+        final Object objFirst = first.getProperty(property);
+        final Object objSecond = second.getProperty(property);
+        return objFirst != null && objSecond != null && objFirst.equals(objSecond);
     }
 }

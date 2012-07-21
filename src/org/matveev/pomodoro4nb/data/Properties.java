@@ -95,6 +95,10 @@ public class Properties {
         checkArguments(e);
         elements.remove(e);
     }
+    
+    public void removeElements() {
+        elements.clear();
+    }
 
     private void checkArguments(Properties element) {
         if (element == null) {

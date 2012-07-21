@@ -19,6 +19,7 @@ package org.matveev.pomodoro4nb.task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.matveev.pomodoro4nb.data.Children;
 import org.matveev.pomodoro4nb.data.Properties;
 
@@ -37,17 +38,11 @@ public class Activity extends Properties {
         return (Task) getElements().get(index);
     }
     
-    public void removeAllTasks() {
-        for (Properties e : getElements()) {
-            removeElement(e);
-        }
-    }
-    
     public List<Task> getTaskList() {
-        final List<Task> result = new ArrayList<Task>();
+        final List<Task> result = new CopyOnWriteArrayList<Task>();
         for (Properties e : getElements()) {
             result.add((Task) e);
         }
-        return Collections.unmodifiableList(result);
+        return result;
     }
 }
