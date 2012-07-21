@@ -42,7 +42,8 @@ public class EditTaskAction extends BasicAction {
         final TaskTableModel model = table.getTaskTableModel();
         final Task task = model.getTask(index);
 
-        final TaskDialog taskDialog = new TaskDialog(task);
+        final TaskDialog taskDialog = new TaskDialog();
+        taskDialog.setTaskToEdit(task);
         taskDialog.setVisible(true);
 
         Task updatedTask = taskDialog.getResult();

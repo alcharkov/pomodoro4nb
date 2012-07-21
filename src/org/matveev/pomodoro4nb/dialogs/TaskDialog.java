@@ -37,15 +37,19 @@ public class TaskDialog extends AbstractDialog<Task> {
 
     private JTextField descriptionField;
     private JSpinner estimateSpinner;
-    private final Task taskToEdit;
+    private Task taskToEdit;
 
     public TaskDialog() {
-        this(null);
-    }
-    
-    public TaskDialog(Task toEdit) {
         super("TaskDialog");
-        this.taskToEdit = toEdit;
+    }
+
+    public void setTaskToEdit(Task taskToEdit) {
+        this.taskToEdit = taskToEdit;
+        if (taskToEdit != null) {
+            descriptionField.setText(taskToEdit.getProperty(Task.Description));
+            estimateSpinner.setValue(taskToEdit.getProperty(Task.Estimate));
+        }
+
     }
 
     @Override
@@ -82,11 +86,6 @@ public class TaskDialog extends AbstractDialog<Task> {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
         contentPanel.add(estimateSpinner, gbc);
-
-        if (taskToEdit != null) {
-            descriptionField.setText(taskToEdit.getProperty(Task.Description));
-            estimateSpinner.setValue(taskToEdit.getProperty(Task.Estimate));
-        }
 
         return contentPanel;
     }
