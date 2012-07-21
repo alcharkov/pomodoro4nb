@@ -69,8 +69,8 @@ public class PomodoroTimer extends JPanel {
     }
 
     public void forcedStop() {
-        setState(State.IDLE);
         isForcedStateChange = true;
+        setState(State.IDLE);
     }
 
     public void setNewTimerData(PomodoroTimerData data) {
@@ -88,7 +88,6 @@ public class PomodoroTimer extends JPanel {
                 pomodoros++;
             }
             start();
-
         }
     }
 

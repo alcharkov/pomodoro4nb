@@ -103,15 +103,17 @@ public class TaskController extends AbstractController {
 
             @Override
             public void handle(StateInfo oldState, StateInfo newState) {
-                if (newState != null && !newState.isForced()) {
-                    if (State.IDLE.equals(newState.getState())) {
-                        Notificator.showNotificationBalloon(Notificator.KEY_START_WORK);
-                        tryPlaySound();
-                    } else if (State.WORK.equals(newState.getState())) {
+                if (newState != null && newState.isForced()) {
+                    if (State.WORK.equals(newState.getState())) {
                         int index = taskTable.getSelectedRow();
                         if (index != -1) {
                             currentTask = taskTable.getTaskTableModel().getTask(index);
                         }
+                    } 
+                } else if (newState != null && !newState.isForced()) {
+                    if (State.IDLE.equals(newState.getState())) {
+                        Notificator.showNotificationBalloon(Notificator.KEY_START_WORK);
+                        tryPlaySound();
                     } else if (State.BREAK.equals(newState.getState())) {
                         if (currentTask != null) {
                             final Integer pomodoros = currentTask.getProperty(Task.Pomodoros);

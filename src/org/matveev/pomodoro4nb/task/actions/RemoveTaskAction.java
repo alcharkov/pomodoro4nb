@@ -44,7 +44,7 @@ public class RemoveTaskAction extends BasicAction {
         final Task  selectedTask = model.getTask(table.getSelectedRow());
         model.removeTask(selectedTask);
         if (Utils.isPropertiesEqual(selectedTask, controller.getCurretTask(), Task.Id)) {
-            controller.fire(TaskController.TaskRemovedProperty, false, true);
+            controller.fire(TaskController.ActiveTaskRemovedProperty, false, true);
         }
 
     }
