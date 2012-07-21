@@ -17,7 +17,7 @@ import org.matveev.pomodoro4nb.utils.Handler;
  */
 public class TimerController extends AbstractController {
 
-    public static final String TIMER_CONTROLLER_ID = "timerController";
+    public static final String ID = "timerController";
     public static final Property<StateInfo> STATE_CHANGED_PROPERTY = new Property<StateInfo>("stateChanged", StateInfo.class);
     public static final Property<Boolean> PRE_START_TIMER_PROPERTY = new Property<Boolean>("preStart", Boolean.class);
     private final PomodoroTimer timer;

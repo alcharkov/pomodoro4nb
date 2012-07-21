@@ -63,7 +63,7 @@ import org.matveev.pomodoro4nb.utils.Resources;
  */
 public class TaskController extends AbstractController {
 
-    public static final String TASK_CONTROLLER_ID = "taskController";
+    public static final String ID = "taskController";
     //
     public static final Property<Boolean> HasTasksProperty = new Property<Boolean>("hasTasks", Boolean.class);
     //

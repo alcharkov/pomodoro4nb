@@ -7,13 +7,14 @@ import java.util.Map;
 import java.util.Properties;
 import javax.swing.JPanel;
 import org.matveev.pomodoro4nb.controllers.Controller;
-import org.matveev.pomodoro4nb.utils.Handler;
+import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.data.PropertyListener;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.prefs.PreferencesProviderFactory;
 import org.matveev.pomodoro4nb.task.TaskController;
+import org.matveev.pomodoro4nb.timer.ReminderController;
 import org.matveev.pomodoro4nb.timer.TimerController;
-import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.data.PropertyListener;
+import org.matveev.pomodoro4nb.utils.Handler;
 import org.matveev.pomodoro4nb.utils.Storable;
 
 /**
@@ -26,20 +27,24 @@ public class PomodoroMainController implements PropertyListener, Storable {
     private final TimerController timerController;
     private final TaskController taskController;
     private final PreferencesProvider provider;
+    private final ReminderController reminderController;
 
     public PomodoroMainController() {
         provider = PreferencesProviderFactory.getPreferencesProvider();
+        reminderController = new ReminderController(provider);
         timerController = new TimerController(provider);
         taskController = new TaskController(provider);
 
-        registerSubController(TimerController.TIMER_CONTROLLER_ID, timerController);
-        registerSubController(TaskController.TASK_CONTROLLER_ID, taskController);
+
+        registerSubController(ReminderController.ID, reminderController);
+        registerSubController(TimerController.ID, timerController);
+        registerSubController(TaskController.ID, taskController);
     }
 
     public Container createContent() {
         final JPanel content = new JPanel(new BorderLayout());
-        content.add(controllers.get(TimerController.TIMER_CONTROLLER_ID).createUI(), BorderLayout.NORTH);
-        content.add(controllers.get(TaskController.TASK_CONTROLLER_ID).createUI(), BorderLayout.CENTER);
+        content.add(controllers.get(TimerController.ID).createUI(), BorderLayout.NORTH);
+        content.add(controllers.get(TaskController.ID).createUI(), BorderLayout.CENTER);
         return content;
     }
 
