@@ -59,6 +59,7 @@ public final class PreferencesDialog extends javax.swing.JPanel {
                  DefaultPreferencesProvider.DEFAULT_LONG_BREAK_INTERVAL));
          enableSoundsCheckbox.setSelected(provider.getBoolean(ENABLE_SOUNDS_KEY, true));
          enableReminderCheckbox.setSelected(provider.getBoolean(ENABLE_REMINDER_KEY, true));
+         reminderIntervalSpinner.setEnabled(provider.getBoolean(ENABLE_REMINDER_KEY, true));
 
     }
     

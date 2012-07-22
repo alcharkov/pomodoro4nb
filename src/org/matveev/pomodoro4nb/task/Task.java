@@ -18,13 +18,18 @@
  */
 package org.matveev.pomodoro4nb.task;
 
+import java.awt.Color;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.swing.Icon;
 import org.matveev.pomodoro4nb.data.Children;
 import org.matveev.pomodoro4nb.data.Properties;
 import org.matveev.pomodoro4nb.data.Property;
 import org.matveev.pomodoro4nb.task.Interruption.Type;
+import org.matveev.pomodoro4nb.utils.Resources;
+import org.matveev.pomodoro4nb.utils.Utils;
 
 /**
  *
@@ -61,17 +66,30 @@ public class Task extends Properties {
     
     public enum Priority {
 
-        Improvements,
-        Blocker,
-        Critical,
-        Major,
-        Minor,
-        Trivial;
+        Improvements(Utils.parse("#cbe2e7")),
+        Blocker(Utils.parse("#d75d5d")),
+        Critical(Utils.parse("#eca063")),
+        Major(Utils.parse("#eaca98")),
+        Minor(Utils.parse("#efedaa")),
+        Trivial(Utils.parse("#d8f3ca"));
+
+        private Priority(Color color) {
+            this.color = color;
+        }
+        
+        public final Color color; 
     }
 
     public enum Status {
-        Clear,
-        Cloudy,
-        Stormy;
+
+        Clear(Resources.createIcon("weather_sun.png")),
+        Cloudy(Resources.createIcon("weather_clouds.png")),
+        Stormy(Resources.createIcon("weather_lightning.png"));
+
+        private Status(Icon icon) {
+            this.icon = icon;
+        }
+        
+        public final Icon icon;
     }
 }

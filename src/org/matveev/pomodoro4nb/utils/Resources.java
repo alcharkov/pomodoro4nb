@@ -17,6 +17,7 @@
 package org.matveev.pomodoro4nb.utils;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +36,11 @@ public final class Resources {
     private static final String FORNTS_PACKAGE = "/org/matveev/pomodoro4nb/resources/fonts/";
     private static final String SOUNDS_PACKAGE = "/org/matveev/pomodoro4nb/resources/sounds/";
 
-    public static Icon createIcon(final String iconName) {
+    public static Image createImage(final String name) {
+        return createIcon(name).getImage();
+    }
+    
+    public static ImageIcon createIcon(final String iconName) {
         if (iconName == null) {
             return null;
         }

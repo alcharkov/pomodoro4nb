@@ -18,6 +18,7 @@ package org.matveev.pomodoro4nb.task.actions;
 
 import java.awt.event.ActionEvent;
 import org.matveev.pomodoro4nb.task.Task;
+import org.matveev.pomodoro4nb.task.Task.Status;
 import org.matveev.pomodoro4nb.task.TaskTable;
 
 /**
@@ -36,7 +37,17 @@ public class MarkTaskAction extends BasicAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         final Task task = table.getTaskTableModel().getTask(table.getSelectedRow());
-        task.setProperty(Task.Completed, !Boolean.TRUE.equals(task.getProperty(Task.Completed)));
+        final boolean completed = !Boolean.TRUE.equals(task.getProperty(Task.Completed));
+        task.setProperty(Task.Completed, completed);
+        Status status = null;
+        if (completed) {
+            int delta = task.getProperty(Task.Estimate) - task.getProperty(Task.Pomodoros);
+            if (delta >= 0) status = Status.Clear;
+            else if (delta < 0 && delta > -3) status = Status.Cloudy;
+            else status = Status.Stormy;
+        }
+        task.setProperty(Task.TaskStatus, status);
+        
         table.getTaskTableModel().fireTableDataChanged();
     }
 

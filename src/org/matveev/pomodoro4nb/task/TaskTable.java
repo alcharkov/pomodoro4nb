@@ -16,23 +16,14 @@
  */
 package org.matveev.pomodoro4nb.task;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.MouseEvent;
-import java.util.EnumMap;
-import java.util.Map;
-import javax.swing.BorderFactory;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import org.matveev.pomodoro4nb.task.Task.Priority;
+import org.matveev.pomodoro4nb.task.Task.Status;
+import org.matveev.pomodoro4nb.utils.Resources;
 import org.openide.util.NbBundle;
 
 /**
@@ -58,15 +49,14 @@ public class TaskTable extends JTable {
         return renderer;
     }
 
-    @Override
-    public String getToolTipText(MouseEvent e) {
-        Task task = getTaskTableModel().getTask(rowAtPoint(e.getPoint()));
-        return String.format(TOOLTIP_TEXT_PATTERN,
-                task.getProperty(Task.Description),
-                task.getProperty(Task.Pomodoros),
-                task.getProperty(Task.Estimate));
-    }
-
+//    @Override
+//    public String getToolTipText(MouseEvent e) {
+//        Task task = getTaskTableModel().getTask(rowAtPoint(e.getPoint()));
+//        return String.format(TOOLTIP_TEXT_PATTERN,
+//                task.getProperty(Task.Description),
+//                task.getProperty(Task.Pomodoros),
+//                task.getProperty(Task.Estimate));
+//    }
     public TaskTableModel getTaskTableModel() {
         return (TaskTableModel) getModel();
     }
@@ -77,20 +67,14 @@ public class TaskTable extends JTable {
 
     private static class AlignmentTableCellRenderer extends DefaultTableCellRenderer {
 
-        private static final Map<Task.Priority, Color> colorsMap =
-                new EnumMap<Task.Priority, Color>(Task.Priority.class);
-
-        static {
-            colorsMap.put(Priority.Improvements, new Color(233, 239, 242));
-            colorsMap.put(Priority.Critical, new Color(252, 226, 217));
-            colorsMap.put(Priority.Major, new Color(252, 244, 217));
-            colorsMap.put(Priority.Minor, new Color(237, 252, 217));
-        }
         private static final Border EMPTY_BORDER = BorderFactory.createEmptyBorder(0, 5, 0, 0);
         private boolean isCompleted;
-        private Task.Priority taskPriority;
+        private Priority priority;
+        private Status status;
 
-        /*package*/ AlignmentTableCellRenderer() {
+        /*
+         * package
+         */ AlignmentTableCellRenderer() {
         }
 
         @Override
@@ -102,7 +86,9 @@ public class TaskTable extends JTable {
 
             Task task = ((TaskTable) table).getTaskTableModel().getTask(row);
             isCompleted = Boolean.TRUE.equals(task.getProperty(Task.Completed));
-            taskPriority = task.getProperty(Task.TaskPriority);
+            priority = task.getProperty(Task.TaskPriority);
+            status = task.getProperty(Task.TaskStatus);
+            setIcon(status != null && column == 0 ? status.icon : null);
             return this;
         }
 
@@ -116,16 +102,13 @@ public class TaskTable extends JTable {
 
             super.paint(g);
             if (isCompleted) {
-                g2d.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);
+                Icon icon = getIcon();
+                g2d.drawLine(icon == null ? 0 : icon.getIconWidth() + getInsets().right + getInsets().left + 5, getHeight() / 2, getWidth(), getHeight() / 2);
             }
         }
 
         private Color getBackgroundColorForTaskTag() {
-            Color color = Color.WHITE;
-            if (taskPriority != null) {
-                color = colorsMap.get(taskPriority);
-            }
-            return color;
+            return priority == null ? Color.WHITE : priority.color;
         }
     }
 }

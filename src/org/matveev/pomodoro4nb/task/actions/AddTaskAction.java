@@ -17,6 +17,7 @@
 package org.matveev.pomodoro4nb.task.actions;
 
 import java.awt.event.ActionEvent;
+import org.matveev.pomodoro4nb.dialogs.DialogResult;
 import org.matveev.pomodoro4nb.dialogs.TaskDialog;
 import org.matveev.pomodoro4nb.task.Task;
 import org.matveev.pomodoro4nb.task.TaskTable;
@@ -41,7 +42,7 @@ public class AddTaskAction extends BasicAction {
         dialog.setVisible(true);
         
         final Task task = dialog.getResult();
-        if (task != null) {
+        if (DialogResult.OK == dialog.getDialogResult() && task != null) {
             final TaskTableModel model = table.getTaskTableModel();
             model.addTask(task);
 

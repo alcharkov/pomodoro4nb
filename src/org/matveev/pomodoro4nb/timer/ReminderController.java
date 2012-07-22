@@ -40,19 +40,31 @@ public class ReminderController extends AbstractController {
     private final PreferencesProvider provider;
     private ScheduledExecutorService scheduler;
 
-    public ReminderController(PreferencesProvider provider) {
+    public ReminderController(final PreferencesProvider provider) {
         this.provider = provider;
-        if (Boolean.TRUE.equals(provider.getBoolean(
-                DefaultPreferencesProvider.ENABLE_REMINDER_KEY, false))) {
-            registerHandler(TimerController.STATE_CHANGED_PROPERTY,
-                    new Handler<TimerController.StateInfo>() {
+        provider.addPrefrencesListener(new PreferencesProvider.PreferencesListener() {
 
-                        @Override
-                        public void handle(StateInfo oldState, StateInfo newState) {
+            @Override
+            public void preferencesChange(String key, Object newValue) {
+                if (DefaultPreferencesProvider.ENABLE_REMINDER_KEY.equals(key)) {
+                    setReminderActive("true".equals(newValue.toString()));
+                }
+            }
+        });
+
+        registerHandler(TimerController.STATE_CHANGED_PROPERTY,
+                new Handler<TimerController.StateInfo>() {
+
+                    @Override
+                    public void handle(StateInfo oldState, StateInfo newState) {
+                        if (Boolean.TRUE.equals(provider.getBoolean(
+                                DefaultPreferencesProvider.ENABLE_REMINDER_KEY, false))) {
                             setReminderActive(newState != null && State.IDLE == newState.getState());
                         }
-                    });
-
+                    }
+                });
+        if (Boolean.TRUE.equals(provider.getBoolean(
+                DefaultPreferencesProvider.ENABLE_REMINDER_KEY, false))) {
             setReminderActive(true);
         }
     }

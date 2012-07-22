@@ -60,7 +60,7 @@ public class Properties {
     }
 
     public final <T, V> void setProperty(Property<T> property, V value) {
-        if (!property.getType().equals(value.getClass())) {
+        if (value != null && !property.getType().equals(value.getClass())) {
             throw new IllegalArgumentException(
                     "Cannot set value with type '" + value.getClass() 
                     + "' to property with type '" + property.getType() + "'");

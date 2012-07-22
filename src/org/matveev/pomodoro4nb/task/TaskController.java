@@ -234,7 +234,7 @@ public class TaskController extends AbstractController {
             @Override
             public void componentResized(ComponentEvent e) {
                 setPreferredTableColumnWidths(e.getComponent().getSize(), taskTable,
-                        new double[]{0.6, 0.1, 0.1, 0.1, 0.1});
+                        new double[]{0.5, 0.1, 0.1, 0.1, 0.1});
                 taskTable.revalidate();
                 taskTable.repaint();
             }
