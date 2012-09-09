@@ -16,6 +16,7 @@
  */
 package org.matveev.pomodoro4nb.task;
 
+import org.matveev.pomodoro4nb.storage.Storage;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -37,7 +38,7 @@ public class TaskTable extends JTable {
     private final TableCellRenderer renderer;
 
     public TaskTable() {
-        super(new TaskTableModel(new Activity()));
+        super(new TaskTableModel(new Storage()));
         renderer = new AlignmentTableCellRenderer();
         setUI(new TaskTableDragAndDropUI());
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

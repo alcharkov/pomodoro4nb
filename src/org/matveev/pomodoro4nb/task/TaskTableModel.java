@@ -16,6 +16,7 @@
  */
 package org.matveev.pomodoro4nb.task;
 
+import org.matveev.pomodoro4nb.storage.Storage;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.matveev.pomodoro4nb.task.Interruption.Type;
@@ -50,15 +51,15 @@ public class TaskTableModel extends AbstractTableModel {
             return type;
         }
     }
-    private final Activity activity;
+    private final Storage activity;
 
-    public TaskTableModel(Activity activity) {
+    public TaskTableModel(Storage activity) {
         this.activity = activity;
     }
 
     /*
      * package
-     */ Activity getActivity() {
+     */ Storage getActivity() {
         return activity;
     }
 

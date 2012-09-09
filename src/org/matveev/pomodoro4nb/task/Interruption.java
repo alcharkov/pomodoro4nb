@@ -32,6 +32,5 @@ public class Interruption extends Properties {
     }
     
     public static final Property<Type> InterruptionType = new Property<Type>("type", Type.class);
-    public static final Property<UUID> Parent = new Property<UUID>("parent", UUID.class);
     public static final Property<String> Description = new Property<String>("description", String.class);
 }

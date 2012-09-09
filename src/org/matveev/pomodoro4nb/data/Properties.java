@@ -34,8 +34,10 @@ import org.matveev.pomodoro4nb.utils.Utils;
 public class Properties {
 
     public static final Property<UUID> Id = new Property<UUID>("id", UUID.class);
+    public static final Property<UUID> Parent = new Property<UUID>("parent", UUID.class);
     public static final Property<String> SerializeKey = new Property<String>("key", String.class);
-    @Ignore public static final Property<String> ClassType = new Property<String>("class", String.class);
+    public static final Property<String> ClassType = new Property<String>("class", String.class);
+    
     private final Map<Property<?>, Object> holder;
     private final List<Properties> elements;
     private final List<PropertyListener> listeners;

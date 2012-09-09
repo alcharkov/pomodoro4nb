@@ -11,6 +11,7 @@ import org.matveev.pomodoro4nb.data.Property;
 import org.matveev.pomodoro4nb.data.PropertyListener;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.prefs.PreferencesProviderFactory;
+import org.matveev.pomodoro4nb.storage.StorageProvider;
 import org.matveev.pomodoro4nb.task.TaskController;
 import org.matveev.pomodoro4nb.timer.ReminderController;
 import org.matveev.pomodoro4nb.timer.TimerController;
@@ -24,21 +25,16 @@ import org.matveev.pomodoro4nb.utils.Storable;
 public class PomodoroMainController implements PropertyListener, Storable {
 
     private final Map<String, Controller> controllers = new HashMap<String, Controller>();
-    private final TimerController timerController;
-    private final TaskController taskController;
-    private final PreferencesProvider provider;
-    private final ReminderController reminderController;
+    private final PreferencesProvider prefsProvider;
+    private final StorageProvider storageProvider;
 
     public PomodoroMainController() {
-        provider = PreferencesProviderFactory.getPreferencesProvider();
-        reminderController = new ReminderController(provider);
-        timerController = new TimerController(provider);
-        taskController = new TaskController(provider);
-
-
-        registerSubController(ReminderController.ID, reminderController);
-        registerSubController(TimerController.ID, timerController);
-        registerSubController(TaskController.ID, taskController);
+        prefsProvider = PreferencesProviderFactory.getPreferencesProvider();
+        storageProvider = new StorageProvider();
+        
+        registerSubController(ReminderController.ID, new ReminderController(prefsProvider));
+        registerSubController(TimerController.ID, new TimerController(prefsProvider));
+        registerSubController(TaskController.ID, new TaskController(prefsProvider));
     }
 
     public Container createContent() {
@@ -46,10 +42,6 @@ public class PomodoroMainController implements PropertyListener, Storable {
         content.add(controllers.get(TimerController.ID).createUI(), BorderLayout.NORTH);
         content.add(controllers.get(TaskController.ID).createUI(), BorderLayout.CENTER);
         return content;
-    }
-
-    public void createQuickActionPanel(Container c) {
-        c.add(taskController.createQuickActionPanel(), BorderLayout.SOUTH);
     }
 
     public final <T> T getProperty(Property<T> property) {
@@ -84,7 +76,7 @@ public class PomodoroMainController implements PropertyListener, Storable {
     }
 
     public PreferencesProvider getPreferencesProvider() {
-        return provider;
+        return prefsProvider;
     }
 
     @Override
@@ -92,6 +84,8 @@ public class PomodoroMainController implements PropertyListener, Storable {
         for (Storable s : controllers.values()) {
             s.restore(props);
         }
+        storageProvider.restore(props);
+        ((TaskController)controllers.get(TaskController.ID)).setStorageProvider(storageProvider);
     }
 
     @Override
@@ -99,5 +93,6 @@ public class PomodoroMainController implements PropertyListener, Storable {
         for (Storable s : controllers.values()) {
             s.store(props);
         }
+        storageProvider.store(props);
     }
 }

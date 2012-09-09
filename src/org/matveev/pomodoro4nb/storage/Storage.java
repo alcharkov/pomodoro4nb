@@ -14,18 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.backlog;
+package org.matveev.pomodoro4nb.storage;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.matveev.pomodoro4nb.data.Children;
 import org.matveev.pomodoro4nb.data.Properties;
-import org.matveev.pomodoro4nb.task.Interruption;
+import org.matveev.pomodoro4nb.data.Property;
 import org.matveev.pomodoro4nb.task.Task;
 
 /**
  *
  * @author Alexey Matveev
  */
-@Children({Task.class, Interruption.class})
-public class Backlog extends Properties {
+@Children({Task.class})
+public class Storage extends Properties {    
     
+    public static final Property<String> Version = new Property<String>("version", String.class);
+
+    public Storage() {
+        setProperty(Version, "1.0");
+    }
+    
+    public int getTaskCount() {
+        return getElements().size();
+    }
+    
+    public Task getTask(int index) {
+        return (Task) getElements().get(index);
+    }
+    
+    public List<Task> getTaskList() {
+        final List<Task> result = new CopyOnWriteArrayList<Task>();
+        for (Properties e : getElements()) {
+            result.add((Task) e);
+        }
+        return result;
+    }
 }

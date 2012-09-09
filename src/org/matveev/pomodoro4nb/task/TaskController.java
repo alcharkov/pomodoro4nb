@@ -1,5 +1,6 @@
 package org.matveev.pomodoro4nb.task;
 
+import org.matveev.pomodoro4nb.storage.StorageProvider;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -38,8 +39,6 @@ import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
 import org.matveev.pomodoro4nb.timer.TimerController;
 import org.matveev.pomodoro4nb.timer.TimerController.StateInfo;
 import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.data.io.PropertiesSerializer;
-import org.matveev.pomodoro4nb.data.io.PropertiesSerializerFactory;
 import org.matveev.pomodoro4nb.prefs.DefaultPreferencesProvider;
 import org.matveev.pomodoro4nb.task.actions.AddInterruptionAction;
 import org.matveev.pomodoro4nb.task.actions.AddTaskAction;
@@ -52,7 +51,6 @@ import org.matveev.pomodoro4nb.task.actions.NamedAction;
 import org.matveev.pomodoro4nb.task.actions.PreferencesAction;
 import org.matveev.pomodoro4nb.task.actions.PriorityAction;
 import org.matveev.pomodoro4nb.task.actions.RemoveTaskAction;
-import org.matveev.pomodoro4nb.utils.Base64Coder;
 import org.matveev.pomodoro4nb.utils.Handler;
 import org.matveev.pomodoro4nb.utils.MediaPlayer;
 import org.matveev.pomodoro4nb.utils.Resources;
@@ -270,27 +268,12 @@ public class TaskController extends AbstractController {
         }
     }
 
-    @Override
-    public void store(java.util.Properties props) throws Exception {
-        final PropertiesSerializer serializer = PropertiesSerializerFactory.createXMLSerializer();
-        final Activity activity = taskTable.getTaskTableModel().getActivity();
-        final String data = serializer.serialize(activity);
-        props.setProperty("model", Base64Coder.encodeString(data));
-    }
-
-    @Override
-    public void restore(java.util.Properties props) throws Exception {
-        Object data = props.getProperty("model");
-        if (data != null) {
-            final PropertiesSerializer serializer = PropertiesSerializerFactory.createXMLSerializer();
-            final String xmlString = Base64Coder.decodeString((String) data);
-            Activity activity = (Activity) serializer.deserealize(xmlString.trim());
-            taskTable.setModel(new TaskTableModel(activity != null ? activity : new Activity()));
-        }
-    }
-
     public Task getCurretTask() {
         return currentTask;
+    }
+
+    public void setStorageProvider(StorageProvider storageProvider) {
+        taskTable.setModel(new TaskTableModel(storageProvider.getStorage()));
     }
 
     private static final class PopupListener extends MouseAdapter {
