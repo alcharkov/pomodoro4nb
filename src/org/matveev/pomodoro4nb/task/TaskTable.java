@@ -16,15 +16,15 @@
  */
 package org.matveev.pomodoro4nb.task;
 
-import org.matveev.pomodoro4nb.storage.Storage;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import org.matveev.pomodoro4nb.task.Task.Priority;
-import org.matveev.pomodoro4nb.task.Task.Status;
-import org.matveev.pomodoro4nb.utils.Resources;
+import org.matveev.pomodoro4nb.domain.Task;
+import org.matveev.pomodoro4nb.domain.Task.Priority;
+import org.matveev.pomodoro4nb.domain.Task.Status;
+import org.matveev.pomodoro4nb.storage.Storage;
 import org.openide.util.NbBundle;
 
 /**

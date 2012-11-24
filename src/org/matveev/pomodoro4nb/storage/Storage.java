@@ -18,37 +18,44 @@ package org.matveev.pomodoro4nb.storage;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.matveev.pomodoro4nb.data.Children;
-import org.matveev.pomodoro4nb.data.Properties;
-import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.task.Task;
+import org.matveev.pomodoro4nb.core.data.Properties;
+import org.matveev.pomodoro4nb.core.data.Property;
+import org.matveev.pomodoro4nb.domain.Children;
+import org.matveev.pomodoro4nb.domain.DomainObject;
+import org.matveev.pomodoro4nb.domain.Task;
 
 /**
  *
  * @author Alexey Matveev
  */
-@Children({Task.class})
-public class Storage extends Properties {    
-    
+@Children(types = {Task.class})
+public class Storage extends DomainObject {
+
     public static final Property<String> Version = new Property<String>("version", String.class);
 
+    private static final String STORAGE_VERSION = "1.0";
+    
     public Storage() {
-        setProperty(Version, "1.0");
+        setProperty(Version, STORAGE_VERSION);
     }
-    
+
     public int getTaskCount() {
-        return getElements().size();
+        return getChildren().size();
     }
-    
+
     public Task getTask(int index) {
-        return (Task) getElements().get(index);
+        return (Task) getChildren().get(index);
     }
-    
+
     public List<Task> getTaskList() {
         final List<Task> result = new CopyOnWriteArrayList<Task>();
-        for (Properties e : getElements()) {
+        for (Properties e : getChildren()) {
             result.add((Task) e);
         }
         return result;
+    }
+
+    public void removeElements() {
+        getChildren().clear();
     }
 }

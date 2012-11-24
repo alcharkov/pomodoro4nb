@@ -18,8 +18,8 @@ package org.matveev.pomodoro4nb.task.actions;
 
 import java.awt.event.ActionEvent;
 import org.matveev.pomodoro4nb.dialogs.InterruptionDialog;
-import org.matveev.pomodoro4nb.task.Interruption;
-import org.matveev.pomodoro4nb.task.Task;
+import org.matveev.pomodoro4nb.domain.Interruption;
+import org.matveev.pomodoro4nb.domain.Task;
 import org.matveev.pomodoro4nb.task.TaskTable;
 import org.matveev.pomodoro4nb.task.TaskTableModel;
 
@@ -48,7 +48,7 @@ public class AddInterruptionAction extends BasicAction {
         if (interruption != null) {
             interruption.setProperty(Task.Parent, parentTask.getProperty(Task.Id));
             interruption.setProperty(Interruption.InterruptionType, Interruption.Type.Interruption);
-            parentTask.addElement(interruption);
+            parentTask.add(interruption);
             model.fireTableDataChanged();
         }
     }

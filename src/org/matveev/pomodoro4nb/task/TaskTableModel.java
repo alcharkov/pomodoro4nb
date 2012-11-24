@@ -16,10 +16,11 @@
  */
 package org.matveev.pomodoro4nb.task;
 
-import org.matveev.pomodoro4nb.storage.Storage;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import org.matveev.pomodoro4nb.task.Interruption.Type;
+import org.matveev.pomodoro4nb.domain.Interruption.Type;
+import org.matveev.pomodoro4nb.domain.Task;
+import org.matveev.pomodoro4nb.storage.Storage;
 import org.openide.util.NbBundle;
 
 /**
@@ -111,28 +112,28 @@ public class TaskTableModel extends AbstractTableModel {
 
     public void moveTask(int fromIndex, int toIndex) {
         final Task task = activity.getTask(fromIndex);
-        activity.removeElement(task);
-        activity.addElement(toIndex, task);
+        activity.remove(task);
+        activity.insert(toIndex, task);
         fireTableDataChanged();
     }
 
     public void addTask(final Task task) {
-        activity.addElement(task);
+        activity.add(task);
         fireTableDataChanged();
     }
 
     public void insertTask(int index, Task updatedTask) {
-        activity.removeElement(index);
-        activity.addElement(index, updatedTask);
+        activity.remove(index);
+        activity.insert(index, updatedTask);
     }
 
     public void removeTask(int index) {
-        activity.removeElement(index);
+        activity.remove(index);
         fireTableDataChanged();
     }
 
     public void removeTask(final Task task) {
-        activity.removeElement(task);
+        activity.remove(task);
         fireTableDataChanged();
     }
 

@@ -14,28 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.data.io;
+package org.matveev.pomodoro4nb.notification;
 
-import org.matveev.pomodoro4nb.core.data.Properties;
-import org.matveev.pomodoro4nb.domain.DomainObject;
+import org.matveev.pomodoro4nb.utils.Callback;
 
 /**
  *
  * @author Alexey Matveev
  */
-class JsonPropertiesSerializer implements DomainObjectSerializer {
-
-    public JsonPropertiesSerializer() {
-    }
-
-    @Override
-    public String serialize(DomainObject object) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Properties deserealize(String data) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+public interface NotifcationViewer {
+ 
+    public void show(NotificationSource source, Callback onHide);
     
 }

@@ -17,10 +17,10 @@
 package org.matveev.pomodoro4nb.task.actions;
 
 import java.awt.event.ActionEvent;
-import org.matveev.pomodoro4nb.data.PropertyChangeNotifier;
+import org.matveev.pomodoro4nb.domain.PropertyChangeNotifier;
 import org.matveev.pomodoro4nb.dialogs.TaskDialog;
-import org.matveev.pomodoro4nb.task.Interruption;
-import org.matveev.pomodoro4nb.task.Task;
+import org.matveev.pomodoro4nb.domain.Interruption;
+import org.matveev.pomodoro4nb.domain.Task;
 import org.matveev.pomodoro4nb.task.TaskController;
 import org.matveev.pomodoro4nb.task.TaskTable;
 import org.matveev.pomodoro4nb.task.TaskTableModel;
@@ -57,7 +57,7 @@ public class AddUnplannedTaskAction extends BasicAction {
             interrupt.setProperty(Interruption.InterruptionType, Interruption.Type.Unplanned);
             interrupt.setProperty(Interruption.Description, "Created unplaned task");
 
-            parentTask.addElement(interrupt);
+            parentTask.add(interrupt);
 
             model.addTask(unplanned);
             model.fireTableDataChanged();

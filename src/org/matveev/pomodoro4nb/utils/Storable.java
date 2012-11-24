@@ -1,7 +1,5 @@
 /*
- * Pomodoro4NB - Netbeans plugin for work with The Pomodoro Technique
- * 
- * Copyright (C) 2011 Alexey Matveev <mvaleksej@gmail.com>
+ * Copyright (C) 2011-2012 Alexey Matveev <mvaleksej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +23,8 @@ import java.util.Properties;
  * @author Alexey Matveev
  */
 public interface Storable {
+
     public void restore(Properties props) throws Exception;
+
     public void store(Properties props) throws Exception;
 }

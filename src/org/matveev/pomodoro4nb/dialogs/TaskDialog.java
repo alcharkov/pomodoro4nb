@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import org.matveev.pomodoro4nb.task.Task;
+import org.matveev.pomodoro4nb.domain.Task;
 import org.matveev.pomodoro4nb.utils.Utils;
 
 /**

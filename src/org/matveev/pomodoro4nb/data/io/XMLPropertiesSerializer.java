@@ -37,9 +37,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.matveev.pomodoro4nb.data.Children;
-import org.matveev.pomodoro4nb.data.Properties;
-import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.core.data.Property;
+import org.matveev.pomodoro4nb.domain.Children;
+import org.matveev.pomodoro4nb.domain.DomainObject;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -50,26 +50,25 @@ import org.xml.sax.SAXException;
  *
  * @author Alexey Matveev
  */
-public final class XMLPropertiesSerializer implements PropertiesSerializer {
+public final class XMLPropertiesSerializer implements DomainObjectSerializer {
 
-    private static final List<Property<?>> EXCLUDES_LIST = Arrays.<Property<?>>asList(Properties.SerializeKey);
+    private static final List<Property<?>> EXCLUDES_LIST = Arrays.<Property<?>>asList(DomainObject.SerializeKey);
 
     @Override
-    public String serialize(Properties container) throws Exception {
+    public String serialize(DomainObject container) throws Exception {
         return new InternalSerializer(container).serialize();
     }
 
     @Override
-    public Properties deserealize(String xmlString) throws Exception {
+    public DomainObject deserealize(String xmlString) throws Exception {
         return new InternalDeserializer(xmlString).deserialize();
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Serializer">
     private static final class InternalSerializer {
 
-        private final Properties container;
+        private final DomainObject container;
 
-        public InternalSerializer(Properties container) {
+        public InternalSerializer(DomainObject container) {
             this.container = container;
         }
 
@@ -79,14 +78,14 @@ public final class XMLPropertiesSerializer implements PropertiesSerializer {
             return convertToString(doc);
         }
 
-        private Element serializeContainer(final Document doc, final Properties container) {
-            final Element element = doc.createElement(container.getProperty(Properties.SerializeKey));
+        private Element serializeContainer(final Document doc, final DomainObject container) {
+            final Element element = doc.createElement(container.getProperty(DomainObject.SerializeKey));
             for (Property<?> property : container.getProperties()) {
                 if (!EXCLUDES_LIST.contains(property)) {
                     element.setAttribute(property.getName(), container.getProperty(property).toString());
                 }
             }
-            for (Properties e : container.getElements()) {
+            for (DomainObject e : container.getChildren()) {
                 element.appendChild(serializeContainer(doc, e));
             }
 
@@ -100,9 +99,7 @@ public final class XMLPropertiesSerializer implements PropertiesSerializer {
             return domImpl.createDocument(null, null, null);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Deserializer">
     private static final class InternalDeserializer {
 
         private static final Logger LOGGER = Logger.getLogger(InternalDeserializer.class.getName());
@@ -112,36 +109,36 @@ public final class XMLPropertiesSerializer implements PropertiesSerializer {
             this.xmlString = xmlString;
         }
 
-        public Properties deserialize() throws Exception {
+        public DomainObject deserialize() throws Exception {
             final Document doc = parseXMLString(xmlString);
             if (doc == null) {
                 return null;
             }
             final Element rootElement = doc.getDocumentElement();
-            final Properties rootContainer = createContainer(rootElement);
+            final DomainObject rootContainer = createDomainObject(rootElement);
             parseAttributes(rootContainer, rootElement);
 
             final List<NodeList> subElements = extractSubElements(rootElement, rootContainer);
             for (NodeList list : subElements) {
                 for (int ix = 0; ix < list.getLength(); ix++) {
                     final Element e = (Element) list.item(ix);
-                    rootContainer.addElement(deserializeContainer(e));
+                    rootContainer.add(deserializeDomainObject(e));
                 }
             }
             return rootContainer;
         }
 
-        public static List<NodeList> extractSubElements(final Element element, final Properties container)
+        public static List<NodeList> extractSubElements(final Element element, final DomainObject container)
                 throws Exception {
             final List<NodeList> result = new ArrayList<NodeList>();
 
             final Children children = container.getClass().getAnnotation(Children.class);
             if (children != null) {
-                final Class<? extends Properties>[] types = children.value();
-                for (Class<? extends Properties> type : types) {
-                    final Object instance = type.getConstructor(null).newInstance();
+                final Class<? extends DomainObject>[] types = children.types();
+                for (Class<? extends DomainObject> type : types) {
+                    final Object instance = type.getConstructor((Class<?>) null).newInstance();
                     if (instance != null) {
-                        final String name = ((Properties) instance).getProperty(Properties.SerializeKey);
+                        final String name = ((DomainObject) instance).getProperty(DomainObject.SerializeKey);
                         final NodeList nodeList = element.getElementsByTagName(name);
                         if (nodeList != null) {
                             result.add(nodeList);
@@ -167,7 +164,7 @@ public final class XMLPropertiesSerializer implements PropertiesSerializer {
             return null;
         }
 
-        private static void parseAttributes(Properties container, final Element element) throws SecurityException {
+        private static void parseAttributes(DomainObject container, final Element element) throws SecurityException {
             for (Field field : container.getClass().getFields()) {
                 final Property<?> property = extractPropertyFrom(field);
                 if (property != null) {
@@ -204,27 +201,26 @@ public final class XMLPropertiesSerializer implements PropertiesSerializer {
             return builder.parse(new ByteArrayInputStream(xml.getBytes("UTF-8")));
         }
 
-        private static Properties createContainer(final Element element) throws Exception {
-            final Class type = Class.forName(element.getAttribute(Properties.ClassType.getName()));
-            final Object instance = type.getConstructor(null).newInstance();
-            return instance == null ? null : (Properties) instance;
+        private static DomainObject createDomainObject(final Element element) throws Exception {
+            final Class type = Class.forName(element.getAttribute(DomainObject.ClassType.getName()));
+            final Object instance = type.getConstructor((Class) null).newInstance();
+            return instance == null ? null : (DomainObject) instance;
         }
 
-        private static Properties deserializeContainer(final Element element) throws Exception {
-            Properties container = createContainer(element);
-            if (container != null) {
-                parseAttributes(container, element);
-                List<NodeList> subElements = extractSubElements(element, container);
+        private static DomainObject deserializeDomainObject(final Element element) throws Exception {
+            final DomainObject object = createDomainObject(element);
+            if (object != null) {
+                parseAttributes(object, element);
+                List<NodeList> subElements = extractSubElements(element, object);
                 for (NodeList list : subElements) {
                     for (int i = 0; i < list.getLength(); i++) {
-                        container.addElement(deserializeContainer((Element) list.item(i)));
+                        object.add(deserializeDomainObject((Element) list.item(i)));
                     }
                 }
             }
-            return container;
+            return object;
         }
     }
-    //</editor-fold>
 
     private static String convertToString(final Document doc)
             throws TransformerConfigurationException, TransformerException {

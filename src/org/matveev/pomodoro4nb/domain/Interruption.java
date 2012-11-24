@@ -14,17 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.task;
+package org.matveev.pomodoro4nb.domain;
 
-import java.util.UUID;
-import org.matveev.pomodoro4nb.data.Properties;
-import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.core.data.Property;
 
 /**
  *
  * @author Alexey Matveev
  */
-public class Interruption extends Properties {
+public class Interruption extends DomainObject {
     
     public enum Type {
         Interruption,

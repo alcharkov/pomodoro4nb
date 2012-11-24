@@ -82,34 +82,38 @@ public final class PreferencesDialog extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         timingPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        pomodoroLengthLabel = new javax.swing.JLabel();
         pomodoroLengthSpinner = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        shortBreakLengthLabel = new javax.swing.JLabel();
+        longBreakLengthLabel = new javax.swing.JLabel();
+        longBreakInterval = new javax.swing.JLabel();
         shorBreakLengthSpinner = new javax.swing.JSpinner();
         longBreakLengthSpinner = new javax.swing.JSpinner();
         longBreakIntervalSpinner = new javax.swing.JSpinner();
-        jPanel1 = new javax.swing.JPanel();
-        enableSoundsCheckbox = new javax.swing.JCheckBox();
-        jPanel2 = new javax.swing.JPanel();
+        reminderPanel = new javax.swing.JPanel();
         enableReminderCheckbox = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         reminderIntervalSpinner = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        enableSoundsCheckbox = new javax.swing.JCheckBox();
+        jTextField1 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
-        timingPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.timingPanel.border.title"))); // NOI18N
+        setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jLabel1.text")); // NOI18N
+        pomodoroLengthLabel.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.pomodoroLengthLabel.text")); // NOI18N
 
         pomodoroLengthSpinner.setModel(new javax.swing.SpinnerNumberModel(25, 1, 60, 1));
         pomodoroLengthSpinner.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jLabel2.text")); // NOI18N
+        shortBreakLengthLabel.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.shortBreakLengthLabel.text")); // NOI18N
 
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jLabel3.text")); // NOI18N
+        longBreakLengthLabel.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.longBreakLengthLabel.text")); // NOI18N
 
-        jLabel4.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jLabel4.text")); // NOI18N
+        longBreakInterval.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.longBreakInterval.text")); // NOI18N
 
         shorBreakLengthSpinner.setModel(new javax.swing.SpinnerNumberModel(5, 1, 60, 1));
         shorBreakLengthSpinner.setPreferredSize(new java.awt.Dimension(50, 20));
@@ -125,61 +129,47 @@ public final class PreferencesDialog extends javax.swing.JPanel {
         timingPanelLayout.setHorizontalGroup(
             timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(timingPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addGroup(timingPanelLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pomodoroLengthLabel)
+                            .addComponent(shortBreakLengthLabel)
+                            .addComponent(longBreakLengthLabel)))
+                    .addGroup(timingPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(longBreakInterval)))
                 .addGap(31, 31, 31)
-                .addGroup(timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pomodoroLengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(shorBreakLengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(longBreakLengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(longBreakIntervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGroup(timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(longBreakLengthSpinner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(shorBreakLengthSpinner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(longBreakIntervalSpinner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pomodoroLengthSpinner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(62, 203, Short.MAX_VALUE))
         );
         timingPanelLayout.setVerticalGroup(
             timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(timingPanelLayout.createSequentialGroup()
+                .addGap(9, 9, 9)
                 .addGroup(timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(pomodoroLengthLabel)
                     .addComponent(pomodoroLengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(shortBreakLengthLabel)
                     .addComponent(shorBreakLengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(9, 9, 9)
                 .addGroup(timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(longBreakLengthLabel)
                     .addComponent(longBreakLengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(timingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(longBreakIntervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(longBreakIntervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(longBreakInterval))
+                .addGap(6, 6, 6))
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jPanel1.border.title"))); // NOI18N
-
-        enableSoundsCheckbox.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.enableSoundsCheckbox.text")); // NOI18N
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(enableSoundsCheckbox)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(enableSoundsCheckbox)
-                .addContainerGap(8, Short.MAX_VALUE))
-        );
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jPanel2.border.title"))); // NOI18N
+        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.timingPanel.TabConstraints.tabTitle"), timingPanel); // NOI18N
 
         enableReminderCheckbox.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.enableReminderCheckbox.text")); // NOI18N
 
@@ -189,71 +179,98 @@ public final class PreferencesDialog extends javax.swing.JPanel {
         reminderIntervalSpinner.setMinimumSize(new java.awt.Dimension(60, 20));
         reminderIntervalSpinner.setPreferredSize(new java.awt.Dimension(50, 20));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(enableReminderCheckbox)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jLabel2.text")); // NOI18N
+
+        javax.swing.GroupLayout reminderPanelLayout = new javax.swing.GroupLayout(reminderPanel);
+        reminderPanel.setLayout(reminderPanelLayout);
+        reminderPanelLayout.setHorizontalGroup(
+            reminderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reminderPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(reminderIntervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(reminderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(enableReminderCheckbox)
+                    .addGroup(reminderPanelLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reminderIntervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        reminderPanelLayout.setVerticalGroup(
+            reminderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reminderPanelLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(enableReminderCheckbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(reminderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(reminderIntervalSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 55, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.reminderPanel.TabConstraints.tabTitle"), reminderPanel); // NOI18N
+
+        enableSoundsCheckbox.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.enableSoundsCheckbox.text")); // NOI18N
+
+        jTextField1.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jTextField1.text")); // NOI18N
+        jTextField1.setEnabled(false);
+
+        jButton1.setText(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jButton1.text")); // NOI18N
+        jButton1.setEnabled(false);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(timingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(timingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jButton1))
+                    .addComponent(enableSoundsCheckbox))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(enableSoundsCheckbox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap(76, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(PreferencesDialog.class, "PreferencesDialog.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
+
+        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox enableReminderCheckbox;
     private javax.swing.JCheckBox enableSoundsCheckbox;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel longBreakInterval;
     private javax.swing.JSpinner longBreakIntervalSpinner;
+    private javax.swing.JLabel longBreakLengthLabel;
     private javax.swing.JSpinner longBreakLengthSpinner;
+    private javax.swing.JLabel pomodoroLengthLabel;
     private javax.swing.JSpinner pomodoroLengthSpinner;
     private javax.swing.JSpinner reminderIntervalSpinner;
+    private javax.swing.JPanel reminderPanel;
     private javax.swing.JSpinner shorBreakLengthSpinner;
+    private javax.swing.JLabel shortBreakLengthLabel;
     private javax.swing.JPanel timingPanel;
     // End of variables declaration//GEN-END:variables
 }

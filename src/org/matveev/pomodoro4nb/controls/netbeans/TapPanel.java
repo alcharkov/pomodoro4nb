@@ -46,10 +46,10 @@
  */
 package org.matveev.pomodoro4nb.controls.netbeans;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.ref.*;
+import javax.swing.*;
 
 /**
  * Panel that can collapse to a small size and be reexpanded.

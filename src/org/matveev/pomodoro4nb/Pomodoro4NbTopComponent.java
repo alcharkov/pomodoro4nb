@@ -5,14 +5,12 @@
 package org.matveev.pomodoro4nb;
 
 import java.awt.BorderLayout;
-import java.io.IOException;
-import javax.swing.JComponent;
-import org.openide.util.Exceptions;
-import org.openide.util.NbBundle;
-import org.openide.windows.TopComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -29,10 +27,10 @@ persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 preferredID = "Pomodoro4NbTopComponent")
 public final class Pomodoro4NbTopComponent extends TopComponent {
 
-    private final PomodoroMainController mainController;
+    private final Pomodoro4NbController mainController;
 
     public Pomodoro4NbTopComponent() {
-        mainController = new PomodoroMainController();
+        mainController = new Pomodoro4NbController();
         initComponents();
         additionalInit();
         setName(NbBundle.getMessage(Pomodoro4NbTopComponent.class, "CTL_Pomodoro4NbTopComponent"));

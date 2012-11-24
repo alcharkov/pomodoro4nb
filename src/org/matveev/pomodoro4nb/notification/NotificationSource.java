@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2012 Alexey Matveev <mvaleksej@gmail.com>
+/* 
+ * Copyright (C) 2011 Alexey Matveev <mvaleksej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,28 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.data.io;
+package org.matveev.pomodoro4nb.notification;
 
 import org.matveev.pomodoro4nb.core.data.Properties;
-import org.matveev.pomodoro4nb.domain.DomainObject;
+import org.matveev.pomodoro4nb.core.data.Property;
 
 /**
  *
  * @author Alexey Matveev
  */
-class JsonPropertiesSerializer implements DomainObjectSerializer {
+public class NotificationSource extends Properties {
 
-    public JsonPropertiesSerializer() {
-    }
-
-    @Override
-    public String serialize(DomainObject object) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Properties deserealize(String data) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public static final Property<String> Title = new Property<String>("title", String.class);
+    public static final Property<String> Text = new Property<String>("text", String.class);
+    public static final Property<String> Icon = new Property<String>("icon", String.class);
     
+    public NotificationSource() {
+    }
 }

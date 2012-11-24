@@ -16,15 +16,15 @@
  */
 package org.matveev.pomodoro4nb.controllers;
 
-import org.matveev.pomodoro4nb.utils.Handler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.matveev.pomodoro4nb.data.Properties;
-import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.data.PropertyListener;
+import org.matveev.pomodoro4nb.core.data.Properties;
+import org.matveev.pomodoro4nb.core.data.Property;
+import org.matveev.pomodoro4nb.core.data.PropertyListener;
+import org.matveev.pomodoro4nb.utils.Handler;
 
 /**
  *

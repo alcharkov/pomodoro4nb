@@ -20,8 +20,9 @@ import java.awt.Container;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.matveev.pomodoro4nb.Notificator;
+import org.matveev.pomodoro4nb.Pomodoro4NbController;
 import org.matveev.pomodoro4nb.controllers.AbstractController;
+import org.matveev.pomodoro4nb.notification.NotificationService;
 import org.matveev.pomodoro4nb.prefs.DefaultPreferencesProvider;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
@@ -38,12 +39,13 @@ public class ReminderController extends AbstractController {
 
     public static final String ID = "reminderController";
     private final PreferencesProvider provider;
+    private final NotificationService notificator;
     private ScheduledExecutorService scheduler;
 
-    public ReminderController(final PreferencesProvider provider) {
-        this.provider = provider;
+    public ReminderController(final Pomodoro4NbController mainController) {
+        this.provider = mainController.getPreferencesProvider();
+        this.notificator = mainController.getNotificationService();
         provider.addPrefrencesListener(new PreferencesProvider.PreferencesListener() {
-
             @Override
             public void preferencesChange(String key, Object newValue) {
                 if (DefaultPreferencesProvider.ENABLE_REMINDER_KEY.equals(key)) {
@@ -54,7 +56,6 @@ public class ReminderController extends AbstractController {
 
         registerHandler(TimerController.STATE_CHANGED_PROPERTY,
                 new Handler<TimerController.StateInfo>() {
-
                     @Override
                     public void handle(StateInfo oldState, StateInfo newState) {
                         if (Boolean.TRUE.equals(provider.getBoolean(
@@ -78,11 +79,11 @@ public class ReminderController extends AbstractController {
             final int interval = getInterval();
             scheduler = Executors.newSingleThreadScheduledExecutor();
             scheduler.scheduleAtFixedRate(new Runnable() {
-
                 @Override
                 public void run() {
-                    Notificator.showNotificationBalloon(Notificator.KEY_START_WORK);
                     MediaPlayer.play(Resources.getSound("budzik.wav"));
+                    notificator.showNotification(NotificationService.NotificationType.Work, NotificationService.DisplayType.Popup, null);
+
                 }
             }, interval, interval, TimeUnit.MINUTES);
         }

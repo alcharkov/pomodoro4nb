@@ -14,19 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.data;
+package org.matveev.pomodoro4nb.domain;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.matveev.pomodoro4nb.core.data.Property;
+import org.matveev.pomodoro4nb.core.data.PropertyListener;
 
 /**
  *
  * @author Alexey Matveev
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Children {
-    Class<? extends Properties>[] value();
+public interface PropertyChangeNotifier {
+
+    public void addPropertyListener(PropertyListener listener);
+
+    public void removePropertyListener(PropertyListener listener);
+
+    public void fire(Property<?> property, Object oldValue, Object newValue);
 }

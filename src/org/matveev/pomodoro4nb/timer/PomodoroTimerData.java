@@ -18,7 +18,7 @@ public class PomodoroTimerData {
 
     public PomodoroTimerData(int pomodoroLength, int shortBreakLength,
             int longBreakLength, int longBreakInterval) {
-        this.pomodoroLengthInMillis = toMillis(pomodoroLength);
+        this.pomodoroLengthInMillis = 4000;//toMillis(pomodoroLength);
         this.shortBreakLengthInMillis = toMillis(shortBreakLength);
         this.longBreakLengthInMillis = toMillis(longBreakLength);
         this.longBreakInterval = longBreakInterval;

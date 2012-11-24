@@ -16,15 +16,16 @@
  */
 package org.matveev.pomodoro4nb.data.io;
 
-import org.matveev.pomodoro4nb.data.Properties;
+import org.matveev.pomodoro4nb.core.data.Properties;
+import org.matveev.pomodoro4nb.domain.DomainObject;
 
 /**
  *
  * @author Alexey Matveev
  */
-public interface PropertiesSerializer {
+public interface DomainObjectSerializer {
 
-    public String serialize(Properties container) throws Exception;
+    public String serialize(DomainObject object) throws Exception;
 
-    public Properties deserealize(String strData) throws Exception;
+    public Properties deserealize(String data) throws Exception;
 }

@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2012 Alexey Matveev <mvaleksej@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.matveev.pomodoro4nb;
 
 import java.awt.BorderLayout;
@@ -7,11 +23,12 @@ import java.util.Map;
 import java.util.Properties;
 import javax.swing.JPanel;
 import org.matveev.pomodoro4nb.controllers.Controller;
-import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.data.PropertyListener;
+import org.matveev.pomodoro4nb.core.data.Property;
+import org.matveev.pomodoro4nb.core.data.PropertyListener;
+import org.matveev.pomodoro4nb.notification.NotificationService;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.prefs.PreferencesProviderFactory;
-import org.matveev.pomodoro4nb.storage.StorageProvider;
+import org.matveev.pomodoro4nb.storage.StorageController;
 import org.matveev.pomodoro4nb.task.TaskController;
 import org.matveev.pomodoro4nb.timer.ReminderController;
 import org.matveev.pomodoro4nb.timer.TimerController;
@@ -20,21 +37,25 @@ import org.matveev.pomodoro4nb.utils.Storable;
 
 /**
  *
- * @author Alexey Matvey
+ * @author Alexey Matveev
  */
-public class PomodoroMainController implements PropertyListener, Storable {
+public class Pomodoro4NbController implements PropertyListener, Storable {
 
     private final Map<String, Controller> controllers = new HashMap<String, Controller>();
     private final PreferencesProvider prefsProvider;
-    private final StorageProvider storageProvider;
+    private final StorageController storageProvider;
+    private final NotificationService notificationService;
+    
+    
 
-    public PomodoroMainController() {
+    public Pomodoro4NbController() {
+        notificationService = new NotificationService();
         prefsProvider = PreferencesProviderFactory.getPreferencesProvider();
-        storageProvider = new StorageProvider();
+        storageProvider = new StorageController();
         
-        registerSubController(ReminderController.ID, new ReminderController(prefsProvider));
+        registerSubController(ReminderController.ID, new ReminderController(this));
         registerSubController(TimerController.ID, new TimerController(prefsProvider));
-        registerSubController(TaskController.ID, new TaskController(prefsProvider));
+        registerSubController(TaskController.ID, new TaskController(this));
     }
 
     public Container createContent() {
@@ -94,5 +115,9 @@ public class PomodoroMainController implements PropertyListener, Storable {
             s.store(props);
         }
         storageProvider.store(props);
+    }
+
+    public NotificationService getNotificationService() {
+        return notificationService;
     }
 }

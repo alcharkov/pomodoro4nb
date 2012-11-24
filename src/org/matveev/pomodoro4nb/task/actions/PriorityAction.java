@@ -18,7 +18,7 @@ package org.matveev.pomodoro4nb.task.actions;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import org.matveev.pomodoro4nb.task.Task;
+import org.matveev.pomodoro4nb.domain.Task;
 import org.matveev.pomodoro4nb.task.TaskTable;
 import org.matveev.pomodoro4nb.task.TaskTableModel;
 import org.matveev.pomodoro4nb.utils.ValidatableAction;

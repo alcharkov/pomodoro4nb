@@ -20,8 +20,8 @@ import org.matveev.pomodoro4nb.utils.Handler;
 import java.awt.Container;
 import java.util.List;
 import org.matveev.pomodoro4nb.utils.Storable;
-import org.matveev.pomodoro4nb.data.Property;
-import org.matveev.pomodoro4nb.data.PropertyChangeNotifier;
+import org.matveev.pomodoro4nb.core.data.Property;
+import org.matveev.pomodoro4nb.domain.PropertyChangeNotifier;
 
 /**
  *

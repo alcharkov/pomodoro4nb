@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Alexey Matveev <mvaleksej@gmail.com>
+ * Copyright (C) 2011-2012 Alexey Matveev <mvaleksej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@ package org.matveev.pomodoro4nb.utils;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
-import org.matveev.pomodoro4nb.data.Properties;
-import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.core.data.Properties;
+import org.matveev.pomodoro4nb.core.data.Property;
 
 /**
  *
@@ -28,8 +28,12 @@ import org.matveev.pomodoro4nb.data.Property;
  */
 public class Utils {
 
-    public static boolean isNotEmpty(String str) {
-        return str != null && !str.isEmpty();
+    public static boolean isNotEmpty(String candidate) {
+        return !isEmpty(candidate);
+    }
+
+    public static boolean isEmpty(String candidate) {
+        return candidate == null && candidate.isEmpty();
     }
 
     public static boolean isWindows() {
@@ -57,7 +61,7 @@ public class Utils {
         return false;
     }
 
-    public static boolean isContains(String name, Class<? extends Properties>[] types) {
+    public static boolean isContainProperty(String name, Class<? extends Properties>[] types) {
         for (Class<? extends Properties> type : types) {
             if (type.getName().equals(name)) {
                 return true;
@@ -75,7 +79,7 @@ public class Utils {
         return objFirst != null && objSecond != null && objFirst.equals(objSecond);
     }
 
-    public static Color parse(String c) {
+    public static Color parseColor(String c) {
         return new Color(Integer.parseInt(c.startsWith("#") ? c.substring(1) : c, 16));
     }
 }

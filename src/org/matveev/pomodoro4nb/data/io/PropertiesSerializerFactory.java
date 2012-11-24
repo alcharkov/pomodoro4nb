@@ -22,11 +22,11 @@ package org.matveev.pomodoro4nb.data.io;
  */
 public class PropertiesSerializerFactory {
 
-    public static PropertiesSerializer createXMLSerializer() {
+    public static DomainObjectSerializer createXMLSerializer() {
         return new XMLPropertiesSerializer();
     }
 
-    public static PropertiesSerializer createJSONSerializer() {
+    public static DomainObjectSerializer createJSONSerializer() {
         return new JsonPropertiesSerializer();
     }
 }

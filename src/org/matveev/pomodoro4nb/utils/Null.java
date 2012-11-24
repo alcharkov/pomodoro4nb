@@ -14,28 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.matveev.pomodoro4nb.data.io;
-
-import org.matveev.pomodoro4nb.core.data.Properties;
-import org.matveev.pomodoro4nb.domain.DomainObject;
+package org.matveev.pomodoro4nb.utils;
 
 /**
  *
  * @author Alexey Matveev
  */
-class JsonPropertiesSerializer implements DomainObjectSerializer {
+public final class Null {
 
-    public JsonPropertiesSerializer() {
-    }
-
-    @Override
-    public String serialize(DomainObject object) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Properties deserealize(String data) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
+    public static final Null NULL = new Null();
 }

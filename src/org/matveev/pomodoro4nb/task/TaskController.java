@@ -1,6 +1,8 @@
 package org.matveev.pomodoro4nb.task;
 
-import org.matveev.pomodoro4nb.storage.StorageProvider;
+import org.matveev.pomodoro4nb.domain.Interruption;
+import org.matveev.pomodoro4nb.domain.Task;
+import org.matveev.pomodoro4nb.storage.StorageController;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -30,7 +32,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
-import org.matveev.pomodoro4nb.Notificator;
+import org.matveev.pomodoro4nb.Pomodoro4NbController;
 import org.matveev.pomodoro4nb.utils.ValidatableAction;
 import org.matveev.pomodoro4nb.controllers.AbstractController;
 import org.matveev.pomodoro4nb.controls.netbeans.TapPanel;
@@ -38,8 +40,12 @@ import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.timer.PomodoroTimer.State;
 import org.matveev.pomodoro4nb.timer.TimerController;
 import org.matveev.pomodoro4nb.timer.TimerController.StateInfo;
-import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.core.data.Property;
+import org.matveev.pomodoro4nb.notification.NotificationService;
+import org.matveev.pomodoro4nb.notification.NotificationService.DisplayType;
+import org.matveev.pomodoro4nb.notification.NotificationService.NotificationType;
 import org.matveev.pomodoro4nb.prefs.DefaultPreferencesProvider;
+import org.matveev.pomodoro4nb.storage.Storage;
 import org.matveev.pomodoro4nb.task.actions.AddInterruptionAction;
 import org.matveev.pomodoro4nb.task.actions.AddTaskAction;
 import org.matveev.pomodoro4nb.task.actions.AddUnplannedTaskAction;
@@ -76,11 +82,13 @@ public class TaskController extends AbstractController {
     private final JPopupMenu popupMenu;
     //
     private final PreferencesProvider provider;
+    private final NotificationService notificator;
     //
     private Task currentTask;
 
-    public TaskController(PreferencesProvider provider) {
-        this.provider = provider;
+    public TaskController(Pomodoro4NbController mainController) {
+        this.provider = mainController.getPreferencesProvider();
+        this.notificator = mainController.getNotificationService();
 
         //<editor-fold defaultstate="collapsed" desc="Create components">
         taskTable = new TaskTable();
@@ -110,16 +118,17 @@ public class TaskController extends AbstractController {
                     } 
                 } else if (newState != null && !newState.isForced()) {
                     if (State.IDLE.equals(newState.getState())) {
-                        Notificator.showNotificationBalloon(Notificator.KEY_START_WORK);
                         tryPlaySound();
+                        notificator.showNotification(NotificationType.Work, DisplayType.Popup, null);
+                       
                     } else if (State.BREAK.equals(newState.getState())) {
                         if (currentTask != null) {
                             final Integer pomodoros = currentTask.getProperty(Task.Pomodoros);
                             currentTask.setProperty(Task.Pomodoros, new Integer(pomodoros + 1));
                             taskTable.getTaskTableModel().fireTableDataChanged();
                         }
-                        Notificator.showNotificationBalloon(Notificator.KEY_START_BREAK);
                         tryPlaySound();
+                        notificator.showNotification(NotificationType.Break, DisplayType.Popup, null);
                     }
                 }
             }
@@ -272,8 +281,12 @@ public class TaskController extends AbstractController {
         return currentTask;
     }
 
-    public void setStorageProvider(StorageProvider storageProvider) {
-        taskTable.setModel(new TaskTableModel(storageProvider.getStorage()));
+    public void setStorageProvider(StorageController storageProvider) {
+        final Storage storage = storageProvider.getStorage();
+        if (storage != null) {
+             taskTable.setModel(new TaskTableModel(storage));
+        }
+       
     }
 
     private static final class PopupListener extends MouseAdapter {

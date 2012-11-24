@@ -4,7 +4,7 @@ import java.awt.Container;
 import java.io.IOException;
 import java.util.Properties;
 import org.matveev.pomodoro4nb.controllers.AbstractController;
-import org.matveev.pomodoro4nb.data.Property;
+import org.matveev.pomodoro4nb.core.data.Property;
 import org.matveev.pomodoro4nb.prefs.DefaultPreferencesProvider;
 import org.matveev.pomodoro4nb.prefs.PreferencesProvider;
 import org.matveev.pomodoro4nb.task.TaskController;

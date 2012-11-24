@@ -25,17 +25,17 @@ import org.matveev.pomodoro4nb.utils.Storable;
  *
  * @author Alexey Matveev
  */
-public class StorageProvider implements Storable {
+public class StorageController implements Storable {
 
     private Storage storage;
 
-    public StorageProvider() {
+    public StorageController() {
     }
 
     public Storage getStorage() {
         return storage;
     }
-    
+
     @Override
     public void store(java.util.Properties props) throws Exception {
         final DomainObjectSerializer serializer = PropertiesSerializerFactory.createXMLSerializer();
@@ -52,5 +52,4 @@ public class StorageProvider implements Storable {
             storage = (Storage) serializer.deserealize(xmlString.trim());
         }
     }
-    
 }

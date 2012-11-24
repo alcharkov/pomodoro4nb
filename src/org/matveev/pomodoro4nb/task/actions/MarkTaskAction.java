@@ -17,8 +17,8 @@
 package org.matveev.pomodoro4nb.task.actions;
 
 import java.awt.event.ActionEvent;
-import org.matveev.pomodoro4nb.task.Task;
-import org.matveev.pomodoro4nb.task.Task.Status;
+import org.matveev.pomodoro4nb.domain.Task;
+import org.matveev.pomodoro4nb.domain.Task.Status;
 import org.matveev.pomodoro4nb.task.TaskTable;
 
 /**
